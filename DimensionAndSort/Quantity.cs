@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace DimensionAndSort
@@ -24,10 +25,8 @@ namespace DimensionAndSort
     {
         #region members
         protected Unit _unit;
-        protected double _value;
         protected double _valueInSIUnits;
         protected Unit.SI_PrefixEnum _prefixIndex = Unit.SI_PrefixEnum.unity;
-        protected string _symbol;
         #endregion
 
         protected bool Equals(QuantityBase other)
@@ -52,7 +51,7 @@ namespace DimensionAndSort
                 var hashCode = (_unit != null ? _unit.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ _valueInSIUnits.GetHashCode();
                 hashCode = (hashCode * 397) ^ (int)_prefixIndex;
-                hashCode = (hashCode * 397) ^ (_symbol != null ? _symbol.GetHashCode() : 0);
+               
                 return hashCode;
             }
         }
@@ -69,6 +68,7 @@ namespace DimensionAndSort
             set { _prefixIndex = value; }
         }
 
+        [JsonIgnore]
         public Unit.SIprefix prefix
         {
             get { return Unit.Prefixes[(int)_prefixIndex]; }
@@ -86,38 +86,34 @@ namespace DimensionAndSort
             return Unit.Prefixes[(int) prefixIndex].Factor * (_unit.Scale * value + _unit.Offset);
         }
 
+        [JsonIgnore]
         public double Value
         {
             get { return (_valueInSIUnits/prefix.Factor - _unit.Offset)/_unit.Scale; }
-            set { _valueInSIUnits = ToSIUnit(value,_unit,_prefixIndex); }
+            //set { _valueInSIUnits = ToSIUnit(value,_unit,_prefixIndex); }
         }
 
-        public string Symbol
-        {
-            get { return _symbol; }
-            set { _symbol = value; }
-        }
-
+        
         public QuantityBase(double value, Unit unit, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity, string symbol = "")
         {
             _unit = unit;
             _valueInSIUnits = ToSIUnit(value, unit, prefix);
-            _value = value;
+          //  _value = value;
             _prefixIndex = prefix;
-            _symbol = symbol;
         }
 
         public QuantityBase()
         {
-            _unit = new Dimensionless();
-            _symbol = string.Empty;
+            //_unit = new Dimensionless();
+            //_symbol = string.Empty;
         }
 
         public void SetUnit(Unit newUnit)
         {
             if (newUnit.SameDimension(_unit))
             {
-                _value = newUnit.FromSIUnit(ValueInSIUnits);
+              //  _value = newUnit.FromSIUnit(ValueInSIUnits);
+
                 _unit = newUnit;
                 _prefixIndex = Unit.SI_PrefixEnum.unity;
             }
@@ -270,13 +266,22 @@ namespace DimensionAndSort
         {
             string str = "";
 
+            string unitString = " "  + _unit;
+
+
+            if (_prefixIndex != Unit.SI_PrefixEnum.unity)
+            {
+                unitString = " " + prefix.Symbol + _unit;
+            }
+            
+
             if (Value >= 0.01)
             {
-                str = Value.ToString("0.00") + " " + prefix.Symbol + _unit.ToString();
+                str = Value.ToString("0.00") + unitString;
             }
             else
             {
-                str = Value.ToString("e2") + " " + prefix.Symbol + _unit.ToString();
+                str = Value.ToString("e2") + unitString;
             }
 
             return str;

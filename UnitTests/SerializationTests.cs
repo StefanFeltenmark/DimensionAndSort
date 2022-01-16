@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using DimensionAndSort;
 using Newtonsoft.Json;
@@ -23,12 +19,28 @@ namespace UnitTests
 
         }
 
+        [Fact]
+        public void SerializationTest02()
+        {
+            List<Length> lengths = new List<Length>
+            {
+                new Length(10),
+                new Length(20),
+                new Length(25)
+            };
+
+            var ttest = SerializeUnserializeObject(lengths);
+
+            Assert.Equal(ttest, lengths);
+
+        }
+
         private T SerializeUnserializeObject<T>(T obj)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                TypeNameHandling = TypeNameHandling.None,
+                TypeNameHandling = TypeNameHandling.Auto,
                 Formatting = Formatting.Indented,
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -37,7 +49,7 @@ namespace UnitTests
             JsonSerializer serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                TypeNameHandling = TypeNameHandling.None,
+                TypeNameHandling = TypeNameHandling.Auto,
                 Formatting = Formatting.Indented,
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore

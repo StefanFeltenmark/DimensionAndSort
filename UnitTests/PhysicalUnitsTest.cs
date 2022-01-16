@@ -116,6 +116,18 @@ namespace UnitTests
         }
 
         [Fact]
+        public void TestEinstein()
+        {
+            Mass m = new Mass(90);
+
+            var e = (m * Quantity.Pow(Constants.SpeedOfLight, 2)).AdjustPrefix(); // todo
+
+            e.AdjustPrefix();
+
+        }
+
+
+        [Fact]
         public void TestAcceleration()
         {
             var t1 = new Time(1000, Units.Second, Unit.SI_PrefixEnum.milli);
@@ -178,6 +190,17 @@ namespace UnitTests
         }
 
         [Fact]
+        public void TestPowerOf()
+        {
+            Length l = new Length(10, Unit.SI_PrefixEnum.centi);
+
+            Volume v = Quantity.Pow(l, 3).ToUnit(Units.QubicMetre,Unit.SI_PrefixEnum.milli);
+
+            Assert.True(v != null);
+
+        }
+
+        [Fact]
         public void TestGravity()
         {
             var m = new Mass(100);
@@ -206,14 +229,10 @@ namespace UnitTests
         public void TestTemperature()
         {
             var t1 = new Temperature(0, Units.Celsius);
-
-            var tc = t1.ValueInSIUnits;
-
             var t2 = new Temperature(32, Units.Farenheit);
+            var t3 = t1 + t2; // gives 273,15 degrees Celsius!
 
-            var tf = t2.ValueInSIUnits;
-
-            var t3 = t1 + t2; // gives 273,15 degress Celsius!
+            Assert.Equal(273.15, t3.Value, 2);
         }
 
         [Fact]
@@ -604,8 +623,6 @@ namespace UnitTests
         {
             var v = new Volume(1, new QubicHectoMetre());
 
-            v.Value = 10;
-
             var l = new Length(10);
 
             Area a = v / l;
@@ -621,7 +638,7 @@ namespace UnitTests
         {
             var v = new Volume(1, new QubicHectoMetre());
 
-            v.Value = 10;
+           
 
             var v2 = new Volume(10, Units.Litre);
 

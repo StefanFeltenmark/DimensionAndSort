@@ -30,8 +30,17 @@ namespace DimensionAndSort
         public static Unit.Scaling kelvin = new("K");
         public static Unit.Scaling candela = new("Ca");
         public static Unit.Scaling mole = new("M");
+    }
 
-
+    public class StandardScalings
+    {
+        public static Unit.Scaling metre = new("m");
+        public static Unit.Scaling kilogram = new("kg");
+        public static Unit.Scaling second = new("s");
+        public static Unit.Scaling ampere = new("A");
+        public static Unit.Scaling kelvin = new("K");
+        public static Unit.Scaling candela = new("Ca");
+        public static Unit.Scaling mole = new("M");
     }
 
 
@@ -275,21 +284,7 @@ namespace DimensionAndSort
             _scale = f; // look at this: we may have a scale that comes from some other unit change, like for mmHg or Watthour. This will overwrite that value!
         }
 
-        public static Unit[] BaseUnits
-        {
-            get { return Unit._baseUnits; }
-        }
-
-        public static Unit[] DerivedUnits
-        {
-            get { return Unit._derivedUnits; }
-        }
-
-        public DimensionUnit[] Dimensions
-        {
-            get { return _dimensions; }
-            set { _dimensions = value; }
-        }
+        
 
         public SIprefix Prefix
         {
