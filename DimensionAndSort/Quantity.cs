@@ -25,6 +25,7 @@ namespace DimensionAndSort
         #region members
         protected Unit _unit;
         protected double _value;
+        protected double _valueInSIUnits;
         protected Unit.SI_PrefixEnum _prefixIndex = Unit.SI_PrefixEnum.unity;
         protected string _symbol;
         #endregion
@@ -49,7 +50,7 @@ namespace DimensionAndSort
             unchecked
             {
                 var hashCode = (_unit != null ? _unit.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ _value.GetHashCode();
+                hashCode = (hashCode * 397) ^ _valueInSIUnits.GetHashCode();
                 hashCode = (hashCode * 397) ^ (int)_prefixIndex;
                 hashCode = (hashCode * 397) ^ (_symbol != null ? _symbol.GetHashCode() : 0);
                 return hashCode;
@@ -75,14 +76,20 @@ namespace DimensionAndSort
 
         public double ValueInSIUnits
         {
-            get { return prefix.Factor * (_unit.Scale * _value + _unit.Offset); }
-            set { _value = value; }
+           // get { return prefix.Factor * (_unit.Scale * _value + _unit.Offset); }
+            get { return _valueInSIUnits;}
+            set { _valueInSIUnits = value; }
+        }
+
+        public double ToSIUnit(double value, Unit unit, Unit.SI_PrefixEnum prefixIndex = Unit.SI_PrefixEnum.unity)
+        {
+            return Unit.Prefixes[(int) prefixIndex].Factor * (_unit.Scale * value + _unit.Offset);
         }
 
         public double Value
         {
-            get { return _value; }
-            set { _value = value; }
+            get { return (_valueInSIUnits/prefix.Factor - _unit.Offset)/_unit.Scale; }
+            set { _valueInSIUnits = ToSIUnit(value,_unit,_prefixIndex); }
         }
 
         public string Symbol
@@ -94,6 +101,7 @@ namespace DimensionAndSort
         public QuantityBase(double value, Unit unit, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity, string symbol = "")
         {
             _unit = unit;
+            _valueInSIUnits = ToSIUnit(value, unit, prefix);
             _value = value;
             _prefixIndex = prefix;
             _symbol = symbol;
@@ -230,12 +238,13 @@ namespace DimensionAndSort
         /// </summary>
         public QuantityBase AdjustPrefix()
         {
-            double minval = Math.Abs(_value - 1); 
+            double val = Value;
+            double minval = Math.Abs(val - 1); 
             Unit.SI_PrefixEnum minind = _prefixIndex;
             foreach (Unit.SI_PrefixEnum sIprefix in Enum.GetValues(typeof(Unit.SI_PrefixEnum)))
             {
                 Unit.SIprefix  pref = Unit.Prefixes[(int) sIprefix];
-                double newValue =  Math.Abs(_value*prefix.Factor / pref.Factor - 1);
+                double newValue =  Math.Abs(val*prefix.Factor / pref.Factor - 1);
                 if (newValue < minval)
                 {
                     minval = newValue;
@@ -253,21 +262,21 @@ namespace DimensionAndSort
 
         public void SetPrefix(Unit.SI_PrefixEnum newprefix)
         {
-            this._value *= prefix.Factor / Unit.Prefixes[(int)newprefix].Factor;
-            PrefixIndex = newprefix;
+           // this._value *= prefix.Factor / Unit.Prefixes[(int)newprefix].Factor;
+            _prefixIndex = newprefix;
         }
 
         public override string ToString()
         {
             string str = "";
 
-            if (_value >= 0.01)
+            if (Value >= 0.01)
             {
-                str = _value.ToString("0.00") + " " + prefix.Symbol + _unit.ToString();
+                str = Value.ToString("0.00") + " " + prefix.Symbol + _unit.ToString();
             }
             else
             {
-                str = _value.ToString("e2") + " " + prefix.Symbol + _unit.ToString();
+                str = Value.ToString("e2") + " " + prefix.Symbol + _unit.ToString();
             }
 
             return str;
@@ -276,7 +285,7 @@ namespace DimensionAndSort
 
         public virtual QuantityBase Clone()
         {
-            return new QuantityBase(_value, _unit, _prefixIndex);
+            return new QuantityBase(Value, _unit, _prefixIndex);
         }
 
 
