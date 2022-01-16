@@ -79,6 +79,7 @@ namespace DimensionAndSort
     }
 
     #region PredefinedUnits
+
     public class Dimensionless : Unit
     {
         public Dimensionless() : base(0, 0, 0, 0, 0, 0, 0) { }
@@ -331,6 +332,7 @@ namespace DimensionAndSort
     public class Farenheit : Unit
     {
         public Farenheit() : base(0, 0, 0, 0, 1, 0, 0) { Scale = 5.0 / 9.0; Offset = 5 * 459.67 / 9; }
+
         public override string ToString() { return "F"; }
     }
 
@@ -352,13 +354,16 @@ namespace DimensionAndSort
         public override string ToString() { return "Hz"; }
     }
 
+    #region ForceUnits
     public class Newton : Unit
     {
         public Newton() : base(1, 1, -2, 0, 0, 0, 0) { }
         public override string ToString() { return "N"; }
 
     }
+    #endregion
 
+    #region Pressureunits
     public class Pascal : Unit
     {
         public Pascal() : base(-1, 1, -2, 0, 0, 0, 0) { }
@@ -378,6 +383,7 @@ namespace DimensionAndSort
         public override string ToString() { return "mmHg"; }
 
     }
+    #endregion
 
     #region EnergyUnits
     public class Joule : Unit

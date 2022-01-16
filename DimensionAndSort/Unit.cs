@@ -111,7 +111,6 @@ namespace DimensionAndSort
                 equal = equal && _symbol.Equals(other.Symbol);
                 equal = equal && _name.Equals(other.Name);
                 return equal;
-                ;
             }
 
             public override string ToString()
@@ -121,7 +120,7 @@ namespace DimensionAndSort
 
         }
 
-        public class Scaling : IEquatable<Scaling>
+        public struct Scaling : IEquatable<Scaling>
         {
             private double _factor; // say 60 for a minute, 3600 for hourly equivalent
             private string _symbol; // "HE", "SqFt"
@@ -162,7 +161,7 @@ namespace DimensionAndSort
 
         }
 
-        public class DimensionUnit
+        public struct DimensionUnit
         {
             #region fields
             private int _exponent;
@@ -324,7 +323,6 @@ namespace DimensionAndSort
         {
             return (val - _offset) / _scale;
         }
-
 
 
         public static Unit operator *(Unit q1, Unit q2)
@@ -501,14 +499,7 @@ namespace DimensionAndSort
         {
             bool equals = true;
             Unit other = other_obj as Unit;
-            if (other != null)
-            {
-                equals = this.Equals(other);
-            }
-            else
-            {
-                equals = false;
-            }
+            @equals = other != null && this.Equals(other);
             return equals;
         }
 

@@ -183,6 +183,7 @@ namespace DimensionAndSort
         public static Quantity operator *(QuantityBase q1, QuantityBase q2)
         {
             Unit prodUnit = q1.Unit * q2.Unit;
+
             double val = (q1.ValueInSIUnits * q2.ValueInSIUnits) / prodUnit.Scale;
 
             return new Quantity(val, prodUnit);
@@ -224,7 +225,31 @@ namespace DimensionAndSort
             return new Quantity(Math.Pow(q1.ValueInSIUnits, (double)n), q1.Unit + n);
         }
 
+        /// <summary>
+        /// Find prefix that gives a value as clode to 1 a possible
+        /// </summary>
+        public QuantityBase AdjustPrefix()
+        {
+            double minval = Math.Abs(_value - 1); 
+            Unit.SI_PrefixEnum minind = _prefixIndex;
+            foreach (Unit.SI_PrefixEnum sIprefix in Enum.GetValues(typeof(Unit.SI_PrefixEnum)))
+            {
+                Unit.SIprefix  pref = Unit.Prefixes[(int) sIprefix];
+                double newValue =  Math.Abs(_value*prefix.Factor / pref.Factor - 1);
+                if (newValue < minval)
+                {
+                    minval = newValue;
+                    minind = sIprefix;
+                }
+            }
 
+            if (minind != _prefixIndex)
+            {
+                SetPrefix(minind);
+            }
+
+            return this;
+        }
 
         public void SetPrefix(Unit.SI_PrefixEnum newprefix)
         {

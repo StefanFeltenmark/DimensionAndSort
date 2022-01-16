@@ -496,7 +496,19 @@ namespace UnitTests
         }
 
         [Fact]
-        public void TestHeatignValue()
+        public void TestNewtonsSecondLaw()
+        {
+            var m = new Mass(90, new Kilogram(Unit.SI_PrefixEnum.mega));
+            var a = new Acceleration(10);
+
+            Force f =  m * a;
+
+            f.AdjustPrefix();
+            
+        }
+
+        [Fact]
+        public void TestHeatingValue()
         {
             var h1 = new HeatingValue(46858);
             var d = new Density(0.0008);
@@ -505,7 +517,7 @@ namespace UnitTests
 
             var q = h1 * d;
 
-            var q2 = q.CovertToUnit(u);
+            var q2 = q.CovertToUnit(u).AdjustPrefix();
 
             var q3 = q.ToUnit(u);
         }
@@ -516,7 +528,7 @@ namespace UnitTests
             var e1 = new Energy(1, Unit.SI_PrefixEnum.mega);
             var e2 = new Energy(1002, Unit.SI_PrefixEnum.kilo);
 
-            var ok = e1 <= e2;
+            Assert.True(e1 <= e2);
         }
 
         [Fact]
