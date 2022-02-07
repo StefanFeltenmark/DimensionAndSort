@@ -13,7 +13,7 @@
     {
         private double _exchangeRateToEUR;
 
-        public Currency(string code) : base(0, 0, 0, 0, 0, 0, 0, 0)
+        public Currency(string code) : base(0, 0, 0, 0, 0, 0, 0)
         {
             Name = code;
             _exchangeRateToEUR = 1.0;
@@ -184,23 +184,7 @@
             return p;
         }
 
-        //        Unit unit = newUnit;
-        //        double value = newUnit.FromSIUnit(ValueInSIUnits);
-        //    {
-        //    if (newUnit.SameDimension(_unit))
-        //    Quantity q = null;
-        //{
-
-        //public Quantity CovertToUnit(Unit newUnit)
-        //        Unit.SI_PrefixEnum prefixIndex = Unit.SI_PrefixEnum.unity;
-        //        q = new Quantity(value, unit, prefixIndex);
-        //    }
-        //    else
-        //    {
-        //        throw new IncompatibleUnits();
-        //    }
-        //    return q;
-        //}
+      
     }
 
     public class PriceUnit : ICloneable

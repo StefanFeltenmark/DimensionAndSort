@@ -307,6 +307,11 @@ namespace DimensionAndSort
             _dimensions[(int)Unit.BaseUnitEnum.candela] = new Unit.DimensionUnit(exp_candela, Scalings.candela, SI_PrefixEnum.unity);
             _dimensions[(int)Unit.BaseUnitEnum.mole] = new Unit.DimensionUnit(exp_mole, Scalings.mole, SI_PrefixEnum.unity);
 
+            if (scale <= 0)
+            {
+                throw new Exception("Scale must be positive");
+            }
+
             _scale = scale;
             _offset = offset;
             _prefixIndex = prefix;

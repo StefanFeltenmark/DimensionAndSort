@@ -395,7 +395,7 @@ namespace UnitTests
 
             Volume q2 = q.ToUnit(Units.QubicHectoMetre);
 
-            Volume q3 = q2.CovertToUnit(Units.HourEquivalent);
+            Volume q3 = q2.ConvertToUnit(Units.HourEquivalent);
         }
 
 
@@ -459,10 +459,10 @@ namespace UnitTests
             var amount1 = new MonetaryAmount(100, Currencies.NorwegianCrown);
             var amount2 = new MonetaryAmount(100, Currencies.SwedishCrown);
 
-            MonetaryAmount amount3 = (amount1 + amount2).CovertToUnit(Currencies.USDollar);
+            MonetaryAmount amount3 = (amount1 + amount2).ConvertToUnit(Currencies.USDollar);
             var diff = amount1 - amount2;
 
-            MonetaryAmount amount4 = amount1.CovertToUnit(Currencies.Euro);
+            MonetaryAmount amount4 = amount1.ConvertToUnit(Currencies.Euro);
 
         }
 
@@ -511,7 +511,7 @@ namespace UnitTests
 
             e.SetPrefix(Unit.SI_PrefixEnum.kilo);
 
-            Energy e2 = e.CovertToUnit(Units.WattHour);
+            Energy e2 = e.ConvertToUnit(Units.WattHour);
         }
 
         [Fact]
@@ -536,7 +536,7 @@ namespace UnitTests
 
             var q = h1 * d;
 
-            var q2 = q.CovertToUnit(u).AdjustPrefix();
+            var q2 = q.ConvertToUnit(u).AdjustPrefix();
 
             var q3 = q.ToUnit(u);
         }
@@ -551,12 +551,31 @@ namespace UnitTests
         }
 
         [Fact]
+        public void TestPowerToEnergy()
+        {
+            Power p1 = new (1, Unit.SI_PrefixEnum.mega);
+            Time t = new Time(3600);
+
+            Unit MWh = new MegaWattHour();
+
+            Energy e = p1 * t;
+
+            e.SetUnit(MWh);
+
+            var e1 = e.ConvertToUnit(MWh);
+            
+            Assert.True(Math.Abs(e1.Value - 1.0) < 1e-6);
+
+            Assert.True(e1.Unit.Equals(MWh));
+        }
+
+        [Fact]
         public void TestEnergy2()
         {
             Unit GWh = new WattHour(Unit.SI_PrefixEnum.giga);
             Unit MWh = new WattHour(Unit.SI_PrefixEnum.mega);
-            var e1 = new Energy(300, GWh);
-            var e2 = e1.CovertToUnit(MWh);
+            Energy e1 = new(300, GWh);
+            var e2 = e1.ConvertToUnit(MWh);
 
             Assert.True(e2.Value.Equals(3e5));
 
@@ -570,7 +589,7 @@ namespace UnitTests
             var p1 = new Percentage(10);
             var p2 = new Percentage(25);
 
-            Energy e3 = ((p1 + p2) * e1).CovertToUnit(Units.MegaWattHour);
+            Energy e3 = ((p1 + p2) * e1).ConvertToUnit(Units.MegaWattHour);
 
             Assert.Equal(3.5e5, e3.ValueInSIUnits,3);
         }
@@ -579,9 +598,9 @@ namespace UnitTests
         public void MegaWattHourTest()
         {
             var e1 = new Energy(1, Unit.SI_PrefixEnum.mega);
-            Energy e2 = e1.CovertToUnit(Units.WattHour);
+            Energy e2 = e1.ConvertToUnit(Units.WattHour);
 
-            Energy e3 = e1.CovertToUnit(new WattHour(Unit.SI_PrefixEnum.mega));
+            Energy e3 = e1.ConvertToUnit(new WattHour(Unit.SI_PrefixEnum.mega));
         }
 
         [Fact]
@@ -591,7 +610,7 @@ namespace UnitTests
 
             var u = (new WattHour(Unit.SI_PrefixEnum.mega)) / (new Kilogram());
 
-            HeatingValue lhv2 = lhv1.CovertToUnit(u);
+            HeatingValue lhv2 = lhv1.ConvertToUnit(u);
         }
 
         [Fact]
@@ -603,7 +622,7 @@ namespace UnitTests
 
             var u1 = (new Joule(Unit.SI_PrefixEnum.giga)) / (new Kilogram(Unit.SI_PrefixEnum.kilo)); // kW/ton
 
-            SpecificEnergy e2 = e.CovertToUnit(u1);
+            SpecificEnergy e2 = e.ConvertToUnit(u1);
         }
 
         [Fact]
@@ -615,7 +634,7 @@ namespace UnitTests
 
             var u1 = (new WattHour(Unit.SI_PrefixEnum.mega)) / (new QubicHectoMetre()); // MWh/MM3
 
-            EnergyEquivalent e2 = e.CovertToUnit(u1);
+            EnergyEquivalent e2 = e.ConvertToUnit(u1);
         }
 
         [Fact]
@@ -627,18 +646,16 @@ namespace UnitTests
 
             Area a = v / l;
 
-            a = a.CovertToUnit(new SquareKilometer());
+            a = a.ConvertToUnit(new SquareKilometer());
 
 
-            Assert.True(Math.Abs(a.Value - 1) < 1e-3);
+            Assert.True(Math.Abs(a.Value - 0.1) < 1e-3);
         }
 
         [Fact]
         public void ScaleTest()
         {
             var v = new Volume(1, new QubicHectoMetre());
-
-           
 
             var v2 = new Volume(10, Units.Litre);
 
@@ -656,6 +673,22 @@ namespace UnitTests
             Assert.Throws<IncompatibleUnits>(() =>
             {
                 var test = l + t;
+            });
+
+
+        }
+
+        [Fact]
+        public void TestIncompatibleUnits2()
+        {
+
+            Length l = new Length(10);
+
+            Force f = new Force(100, Units.Newton, Unit.SI_PrefixEnum.kilo);
+
+            Assert.Throws<IncompatibleUnits>(() =>
+            {
+                Power p = f * l;
             });
 
 

@@ -470,7 +470,10 @@ namespace DimensionAndSort
 
     public class MegaWatt : Unit
     {
-        public MegaWatt() : base(2, 1, -3, 0, 0, 0, 0) { Scale = 1e6; }
+        public MegaWatt() : base(2, 1, -3, 0, 0, 0, 0)
+        {
+            Scale = 1e6;
+        }
 
         public override string ToString() { return "MW"; }
     }
@@ -479,7 +482,7 @@ namespace DimensionAndSort
     {
         public MegaWattHour() : base(2, 1, -2, 0, 0, 0, 0)
         {
-            Scale = 1e6;
+            Scale = 3600*1e6;
         }
         public override string ToString() { return "MWh"; }
     }

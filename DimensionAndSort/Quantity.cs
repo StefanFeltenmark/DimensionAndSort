@@ -90,7 +90,7 @@ namespace DimensionAndSort
         public double Value
         {
             get { return (_valueInSIUnits/prefix.Factor - _unit.Offset)/_unit.Scale; }
-            //set { _valueInSIUnits = ToSIUnit(value,_unit,_prefixIndex); }
+           
         }
 
         
@@ -98,22 +98,18 @@ namespace DimensionAndSort
         {
             _unit = unit;
             _valueInSIUnits = ToSIUnit(value, unit, prefix);
-          //  _value = value;
             _prefixIndex = prefix;
         }
 
         public QuantityBase()
         {
-            //_unit = new Dimensionless();
-            //_symbol = string.Empty;
+            
         }
 
         public void SetUnit(Unit newUnit)
         {
             if (newUnit.SameDimension(_unit))
             {
-              //  _value = newUnit.FromSIUnit(ValueInSIUnits);
-
                 _unit = newUnit;
                 _prefixIndex = Unit.SI_PrefixEnum.unity;
             }
@@ -123,9 +119,9 @@ namespace DimensionAndSort
             }
         }
 
-        public Quantity CovertToUnit(Unit newUnit)
+        public Quantity ConvertToUnit(Unit newUnit)
         {
-            Quantity q = null;
+            Quantity q;
             if (newUnit.SameDimension(_unit))
             {
                 double value = newUnit.FromSIUnit(ValueInSIUnits);
