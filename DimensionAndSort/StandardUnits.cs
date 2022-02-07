@@ -6,7 +6,7 @@
         {
 
         }
-        public static Metre Metre = new Metre();
+        public static readonly Metre Metre = new();
         public static Kilogram Kilogram = new Kilogram();
         public static Second Second = new Second();
         public static Ampere Ampere = new Ampere();
@@ -482,7 +482,7 @@
         public override string ToString() { return "MW"; }
     }
 
-    public class MegaWattHour : Watt
+    public class MegaWattHour : Joule
     {
         public MegaWattHour() 
         {
