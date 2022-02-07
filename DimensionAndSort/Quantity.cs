@@ -106,6 +106,12 @@ namespace DimensionAndSort
             
         }
 
+        public QuantityBase ConvertToDerivedUnit()
+        {
+            SetUnit(this.Unit.ToDerivedUnit());
+            return this;
+        }
+
         public void SetUnit(Unit newUnit)
         {
             if (newUnit.SameDimension(_unit))

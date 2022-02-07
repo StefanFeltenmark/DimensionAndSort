@@ -570,6 +570,21 @@ namespace UnitTests
         }
 
         [Fact]
+        public void TestToDerived()
+        {
+            Force f = new Force(100, Unit.SI_PrefixEnum.kilo);
+            Length l = new Length(100);
+            Time t = new Time(3600);
+
+            var P = (f * l / t).ConvertToDerivedUnit();
+
+            
+
+            Assert.True(P.Unit.Equals(Units.Watt));
+
+        }
+
+        [Fact]
         public void TestEnergy2()
         {
             Unit GWh = new WattHour(Unit.SI_PrefixEnum.giga);
