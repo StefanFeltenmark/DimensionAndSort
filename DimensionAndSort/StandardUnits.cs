@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DimensionAndSort
+﻿namespace DimensionAndSort
 {
     public class Units
     {
@@ -274,6 +268,16 @@ namespace DimensionAndSort
         public override string ToString() { return "C"; }
     }
 
+    public class AmpereHour : Coulomb
+    {
+        public AmpereHour()
+        {
+            _scale = 3600;
+
+        }
+        public override string ToString() { return "Ah"; }
+    }
+
     public class Volt : Unit
     {
         public Volt() : base(2, 1, -3, -1, 0, 0, 0) { }
@@ -468,9 +472,9 @@ namespace DimensionAndSort
         public override string ToString() { return "W"; }
     }
 
-    public class MegaWatt : Unit
+    public class MegaWatt : Watt
     {
-        public MegaWatt() : base(2, 1, -3, 0, 0, 0, 0)
+        public MegaWatt()
         {
             Scale = 1e6;
         }
@@ -478,18 +482,21 @@ namespace DimensionAndSort
         public override string ToString() { return "MW"; }
     }
 
-    public class MegaWattHour : Unit
+    public class MegaWattHour : Watt
     {
-        public MegaWattHour() : base(2, 1, -2, 0, 0, 0, 0)
+        public MegaWattHour() 
         {
             Scale = 3600*1e6;
         }
         public override string ToString() { return "MWh"; }
     }
 
-    public class HorsePower : Unit
+    public class HorsePower : Watt
     {
-        public HorsePower() : base(2, 1, -3, 0, 0, 0, 0) { Scale = 745.7; }
+        public HorsePower()
+        {
+            Scale = 745.7;
+        }
         public override string ToString() { return "hp"; }
     }
     #endregion
