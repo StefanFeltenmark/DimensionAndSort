@@ -958,7 +958,7 @@
         public Power(Power p) : base(p.Value, p.Unit, p.PrefixIndex) { }
         public Power(double val = 0.0) : base(val, _watt) { }
         public Power(double val = 0.0, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _watt, prefix) { }
-        public Power(double val = 0.0, Unit u = null, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
+        public Power(double val = 0.0, Unit? u = null, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
 
         public Power()
         {

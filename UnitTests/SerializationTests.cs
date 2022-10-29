@@ -35,6 +35,22 @@ namespace UnitTests
 
         }
 
+        [Fact]
+        public void SerializationTest03()
+        {
+            List<Energy> objects = new List<Energy>
+            {
+                new Energy(10,new WattHour()),
+                new Energy(20, new Joule()),
+                new Energy(0.25, new MegaWattHour())
+            };
+
+            var ttest = SerializeUnserializeObject(objects);
+
+            Assert.Equal(ttest, objects);
+
+        }
+
         private T SerializeUnserializeObject<T>(T obj)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings
@@ -60,7 +76,7 @@ namespace UnitTests
             TextWriter tw = new StringWriter();
             serializer.Serialize(tw, obj);
 
-            string jsonStr = tw.ToString();
+            string? jsonStr = tw.ToString();
 
             File.WriteAllText("unittest.json", jsonStr);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using DimensionAndSort;
 using Xunit;
+using System.Reflection;
 
 namespace UnitTests
 {
@@ -120,9 +121,14 @@ namespace UnitTests
         {
             Mass m = new Mass(90);
 
-            var e = (m * Quantity.Pow(Constants.SpeedOfLight, 2)).AdjustPrefix(); // todo
+            var e = (m * QuantityBase.Pow(Constants.SpeedOfLight, 2)).AdjustPrefix(); // todo
 
             e.AdjustPrefix();
+
+            
+            e.SetPrefix(Unit.SI_PrefixEnum.giga);
+
+            Assert.True(e.Unit.SameDimension(Units.WattHour));
 
         }
 
@@ -708,6 +714,44 @@ namespace UnitTests
 
 
         }
+
+        [Fact]
+        public void ReflectionTest()
+        {
+            Length l = new Length(10, new Metre(), Unit.SI_PrefixEnum.milli);
+            Unit matched = null;
+            foreach (Unit unit in Units.UnitList)
+            {
+                if (l.Unit == unit)
+                {
+                    matched = unit; 
+                    break;
+                }
+            }
+
+            Assert.True(matched == Units.Metre);
+        }
+
+        [Fact]
+        public void ReflectionTest2()
+        {
+            Mass m = new Mass(2);
+            Speed s = new Speed(3);
+            var kinetic = 0.5 * m * s * s;
+
+            Unit matched = null;
+            foreach (Unit unit in Units.UnitList)
+            {
+                if (kinetic.Unit == unit)
+                {
+                    matched = unit;
+                    break;
+                }
+            }
+
+            Assert.True(matched == Units.Joule);
+        }
+
 
         public class MyImpulseUnit : Unit
         {

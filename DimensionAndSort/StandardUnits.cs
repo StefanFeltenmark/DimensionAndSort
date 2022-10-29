@@ -2,10 +2,16 @@
 {
     public class Units
     {
+        public static List<Unit> UnitList;
+
         static Units()
         {
-
+            UnitList = new List<Unit>()
+            {
+                Metre, Kilogram, Second, Ampere, Kelvin, Joule
+            };
         }
+
         public static readonly Metre Metre = new();
         public static Kilogram Kilogram = new Kilogram();
         public static Second Second = new Second();

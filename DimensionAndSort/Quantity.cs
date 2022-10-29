@@ -232,7 +232,7 @@ namespace DimensionAndSort
         }
 
         /// <summary>
-        /// Find prefix that gives a value as clode to 1 a possible
+        /// Find prefix that gives a value as close to 1 a possible
         /// </summary>
         public QuantityBase AdjustPrefix()
         {
@@ -260,7 +260,7 @@ namespace DimensionAndSort
 
         public void SetPrefix(Unit.SI_PrefixEnum newprefix)
         {
-           // this._value *= prefix.Factor / Unit.Prefixes[(int)newprefix].Factor;
+            //this. *= prefix.Factor / Unit.Prefixes[(int)newprefix].Factor;
             _prefixIndex = newprefix;
         }
 
