@@ -36,7 +36,7 @@ namespace DimensionAndSort
             return ok1 && ok2;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -114,7 +114,7 @@ namespace DimensionAndSort
 
         public void SetUnit(Unit newUnit)
         {
-            if (newUnit.SameDimension(_unit))
+            if (_unit.SameDimension(newUnit))
             {
                 _unit = newUnit;
                 _prefixIndex = Unit.SI_PrefixEnum.unity;
@@ -123,6 +123,21 @@ namespace DimensionAndSort
             {
                 throw new IncompatibleUnits();
             }
+        }
+
+        public bool TrySetUnit(Unit newUnit)
+        {
+            if (newUnit.SameDimension(_unit))
+            {
+                _unit = newUnit;
+                _prefixIndex = Unit.SI_PrefixEnum.unity;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        
         }
 
         public Quantity ConvertToUnit(Unit newUnit)
