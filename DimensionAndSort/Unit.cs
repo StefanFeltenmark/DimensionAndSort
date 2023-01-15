@@ -367,7 +367,10 @@ namespace DimensionAndSort
 
         public static bool operator ==(Unit u1, Unit u2)
         {
-            if ((object)u1 == null) return false;
+            if ((object)u1 == null && (object)u2 == null) return true;
+            if ((object)u1 == null && (object)u2 != null) return false;
+            if ((object)u1 != null && (object)u2 == null) return false;
+
             return u1.Equals(u2);
         }
 
@@ -414,8 +417,12 @@ namespace DimensionAndSort
             {
 
             }
-            du.Scale = u.Scale;
-            du.PrefixIndex = u._prefixIndex;
+
+            if (du != null)
+            {
+                du.Scale = u.Scale;
+                du.PrefixIndex = u._prefixIndex;
+            }
 
             return du;
         }
@@ -450,6 +457,8 @@ namespace DimensionAndSort
         #region IEquatable<Unit> Members
         public bool SameDimension(Unit other)
         {
+            if(other == null) return false;
+
             bool equals = true;
             for (int i = 0; i <= 6; ++i)
             {
