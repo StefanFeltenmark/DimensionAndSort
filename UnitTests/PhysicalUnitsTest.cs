@@ -53,6 +53,38 @@ namespace UnitTests
         }
 
         [Fact]
+        public void TestLength5()
+        {
+            var l1 = new Length(100, Units.Lengths.Centimetre);
+
+            var l2 = new Length(1);
+
+            var l5 = l2 + l1;
+
+          
+
+            Assert.True(l5.Unit.Equals(Units.Metre));
+
+        }
+
+        [Fact]
+        public void TestLength6()
+        {
+            var l1 = new Length(1000, Units.Lengths.Millimetre);
+
+            var l2 = new Length(1);
+
+            var l5 = l2 + l1;
+
+            Assert.True(l5.Unit.Equals(Units.Metre));
+
+            var l6 = l5.ConvertToUnit(Units.Lengths.Kilometre);
+
+            string text = $"l6 = {l6}";
+
+        }
+
+        [Fact]
         public void TestVolume1()
         {
             var l1 = new Length(100, Unit.SI_PrefixEnum.milli);
@@ -66,6 +98,13 @@ namespace UnitTests
             Volume v1 = l1 * l2 * l3;
             
             Assert.True(v1.Unit.Equals(Units.QubicMetre));
+
+            Assert.Throws<IncompatibleUnits>(() =>
+                {
+                    var tests = v1.ConvertToDerivedUnit();
+                    return tests;
+                }
+            );
         }
 
 
@@ -199,11 +238,9 @@ namespace UnitTests
         public void TestPowerOf()
         {
             Length l = new Length(10, Unit.SI_PrefixEnum.centi);
-
-            Volume v = Quantity.Pow(l, 3).ToUnit(Units.QubicMetre,Unit.SI_PrefixEnum.milli);
-
+            
+            Volume v = QuantityBase.Pow(l, 3).ToUnit(Units.Litre);
             Assert.True(v != null);
-
         }
 
         [Fact]
@@ -755,15 +792,15 @@ namespace UnitTests
 
         public class MyImpulseUnit : Unit
         {
-            public static MyImpulseUnit myImpulseUnit = new MyImpulseUnit();
+            public static readonly MyImpulseUnit myImpulseUnit = new MyImpulseUnit();
 
-            public MyImpulseUnit() : base(1, 1, -1, 0, 0, 0, 0)
+            private MyImpulseUnit() : base(1, 1, -1, 0, 0, 0, 0)
             {
                 Scale = 3.1415;
             }
         }
 
-        public class MyImpulseQuantity : QuantityBase
+        private class MyImpulseQuantity : QuantityBase
         {
             public MyImpulseQuantity(double val, Unit u) : base(val, u)
             {
