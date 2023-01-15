@@ -12,6 +12,14 @@
             };
         }
 
+        public static class Lengths
+        {
+            public static readonly Metre Metre = new();
+            public static readonly Centimetre Centimetre = new();
+            public static readonly Unit Millimetre = new Metre(){ PrefixIndex = Unit.SI_PrefixEnum.milli, Scale = 1e-3};
+            public static readonly Unit Kilometre = new Metre() { PrefixIndex = Unit.SI_PrefixEnum.kilo, Scale = 1e3 };
+        }
+
         public static readonly Metre Metre = new();
         public static Kilogram Kilogram = new Kilogram();
         public static Second Second = new Second();
@@ -78,6 +86,14 @@
         }
     }
 
+    public abstract class VolumeUnit : Unit
+    {
+        protected VolumeUnit() : base(3, 0, 0, 0, 0, 0, 0)
+        {
+
+        }
+    }
+
     #region PredefinedUnits
 
     public class Dimensionless : Unit
@@ -101,6 +117,19 @@
         public Metre() { }
     }
 
+    public class Centimetre : Metre
+    {
+        public Centimetre()
+        {
+            Scale = 0.01;
+        }
+
+        public override string ToString()
+        {
+            return "cm";
+        }
+    }
+
     public class Masl : Metre
     {
         public Masl() { }
@@ -111,9 +140,10 @@
         }
     }
 
-    public class QubicMetre : Unit
+    public class QubicMetre : VolumeUnit
     {
-        public QubicMetre() : base(3, 0, 0, 0, 0, 0, 0) { }
+        public QubicMetre() { }
+
     }
 
     public class QubicMetrePerSecond : Unit
@@ -174,22 +204,29 @@
     #endregion
 
     #region VolumeUnits
-    public class Litre : Unit
+    public class Litre : VolumeUnit
     {
-        public Litre() : base(3, 0, 0, 0, 0, 0, 0) { this.Scale = 1e-3; }
+        public Litre()
+        {
+            this.Scale = 1e-3; // compared to SI-unit m^3
+        }
         public override string ToString() { return "l"; }
     }
 
 
-    public class HourEquivalent : Unit
+    public class HourEquivalent : VolumeUnit
     {
-        public HourEquivalent() : base(3, 0, 0, 0, 0, 0, 0) { this.Scale = 3600; }
+        public HourEquivalent() { this.Scale = 3600; }
         public override string ToString() { return "HE"; }
     }
 
-    public class QubicHectoMetre : Unit
+    public class QubicHectoMetre : VolumeUnit
     {
-        public QubicHectoMetre() : base(3, 0, 0, 0, 0, 0, 0, 1e6) { }
+        public QubicHectoMetre()
+        {
+            Scale = 1e6;
+
+        }
         public override string ToString()
         {
             return "hm3";
