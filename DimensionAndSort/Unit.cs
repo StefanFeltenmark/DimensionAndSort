@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace DimensionAndSort
 {
@@ -113,12 +114,16 @@ namespace DimensionAndSort
             }
 
 
-            public bool Equals(SIprefix other)
+            public bool Equals(SIprefix? other)
             {
-                bool equal = true;
-                equal = Math.Abs(_factor - other.Factor) < 1.0e-6;
-                equal = equal && _symbol.Equals(other.Symbol);
-                equal = equal && _name.Equals(other.Name);
+                bool equal = false;
+                if (other != null)
+                {
+                    equal = Math.Abs(_factor - other.Factor) < 1.0e-6;
+                    equal = equal && _symbol.Equals(other.Symbol);
+                    equal = equal && _name.Equals(other.Name);
+                }
+
                 return equal;
             }
 
@@ -284,8 +289,8 @@ namespace DimensionAndSort
             _scale = f; // look at this: we may have a scale that comes from some other unit change, like for mmHg or Watthour. This will overwrite that value!
         }
 
-        
 
+        [JsonIgnore]
         public SIprefix Prefix
         {
             get { return _prefixes[(int)_prefixIndex]; }
@@ -365,7 +370,7 @@ namespace DimensionAndSort
                                 q1._dimensions[(int)BaseUnitEnum.mole].Exponent * n);
         }
 
-        public static bool operator ==(Unit u1, Unit u2)
+        public static bool operator ==(Unit? u1, Unit? u2)
         {
             if ((object)u1 == null && (object)u2 == null) return true;
             if ((object)u1 == null && (object)u2 != null) return false;
@@ -441,7 +446,7 @@ namespace DimensionAndSort
 
             #region IEqualityComparer<Unit> Members
 
-            public bool Equals(Unit x, Unit y)
+            public bool Equals(Unit? x, Unit? y)
             {
                 return x.Equals(y);
             }
@@ -485,7 +490,7 @@ namespace DimensionAndSort
             return equals;
         }
 
-        public bool Equals(Unit other)
+        public bool Equals(Unit? other)
         {
             bool equals = true;
             if (ReferenceEquals(other, null))
@@ -504,7 +509,7 @@ namespace DimensionAndSort
             return equals;
         }
 
-        public override bool Equals(object other_obj)
+        public override bool Equals(object? other_obj)
         {
             bool equals = true;
             Unit other = other_obj as Unit;

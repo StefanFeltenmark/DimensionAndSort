@@ -166,7 +166,7 @@
 
         public UnitPrice ConvertToUnit(PriceUnit newunit)
         {
-            UnitPrice p = null;
+            UnitPrice p;
             if (newunit.Unit.SameDimension(PriceUnit.Unit))
             {
                 var factor1 = PriceUnit.Unit.FromSIUnit(1) / newunit.Unit.FromSIUnit(1);

@@ -1,4 +1,6 @@
-﻿namespace DimensionAndSort
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace DimensionAndSort
 {
     public class Units
     {
@@ -47,6 +49,7 @@
         public static Volt Volt = new Volt();
         public static Watt Watt = new Watt();
         public static MegaWatt MegaWatt = new MegaWatt();
+        public static HorsePower HorsePower = new HorsePower();
         public static Bar Bar = new Bar();
         public static mmHg mmHg = new mmHg();
         public static Litre Litre = new Litre();
@@ -447,6 +450,7 @@
         public override string ToString() { return Prefix.ToString() + "J"; }
     }
 
+    
     public class WattHour : Unit
     {
         public WattHour(SI_PrefixEnum prefixIndex = SI_PrefixEnum.unity) : base(2, 1, -2, 0, 0, 0, 0)

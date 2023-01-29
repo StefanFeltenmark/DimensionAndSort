@@ -789,6 +789,18 @@ namespace UnitTests
             Assert.True(matched == Units.Joule);
         }
 
+        [Fact]
+        public void TestHorsePower()
+        {
+            var EnginePower1 = new Power(450, Units.HorsePower);
+
+            var EnginePower2 = new Power(450, new Watt(Unit.SI_PrefixEnum.kilo));
+
+            bool test = EnginePower2 > EnginePower1;
+
+            Assert.True(test);
+
+        }
 
         public class MyImpulseUnit : Unit
         {
@@ -808,6 +820,7 @@ namespace UnitTests
         }
 
         
+
 
 
 

@@ -103,7 +103,7 @@ namespace DimensionAndSort
 
         public QuantityBase()
         {
-            
+            _unit = new Unit();
         }
 
         public QuantityBase ConvertToDerivedUnit()
