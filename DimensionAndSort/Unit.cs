@@ -512,8 +512,15 @@ namespace DimensionAndSort
         public override bool Equals(object? other_obj)
         {
             bool equals = true;
-            Unit other = other_obj as Unit;
-            @equals = other != null && this.Equals(other);
+
+            if (ReferenceEquals(other_obj, null)) return false;
+
+            if (ReferenceEquals(other_obj, this)) return true;
+
+            if(typeof(Unit) != other_obj.GetType()) return false;
+            
+            @equals = this.Equals((Unit)other_obj);
+            
             return equals;
         }
 

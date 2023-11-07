@@ -793,7 +793,6 @@ namespace UnitTests
         public void TestHorsePower()
         {
             var EnginePower1 = new Power(450, Units.HorsePower);
-
             var EnginePower2 = new Power(450, new Watt(Unit.SI_PrefixEnum.kilo));
 
             bool test = EnginePower2 > EnginePower1;
@@ -819,7 +818,20 @@ namespace UnitTests
             }
         }
 
-        
+        [Fact]
+        public void TestDetectingUnits()
+        {
+            Length lc = new Length(10, Unit.SI_PrefixEnum.centi);
+            Length lm = new Length(10, Unit.SI_PrefixEnum.milli);
+            Length lk = new Length(10, Unit.SI_PrefixEnum.hekto);
+
+            Length L = lk + 2 * lm + 5 * lc;
+
+            var test1 = L.Unit.ToDerivedUnit();
+            var test2 = L.Unit.ToBaseUnit();
+            string label = L.ToString();
+
+        }
 
 
 
