@@ -117,6 +117,20 @@ namespace UnitTests
         }
 
         [Fact]
+        public void TestVolume3()
+        {
+            Volume v1 = new Volume(20);
+            Volume v2 = new Volume(100);
+
+            var v3 = v1.ConvertToUnit(new QubicHectoMetre());
+
+            Quantity alpha = v3 / v2;
+
+            Assert.True(Math.Abs(alpha.ValueInSIUnits - 1/5.0) < 1e-5);
+
+        }
+
+        [Fact]
         public void TestLength4()
         {
             var l1 = new Length(100, Unit.SI_PrefixEnum.milli);
