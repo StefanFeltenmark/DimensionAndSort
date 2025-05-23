@@ -242,7 +242,8 @@ namespace DimensionAndSort
         public enum SI_PrefixEnum { yokto, zepto, atto, femto, piko, nano, mikro, milli, centi, deci, unity, deka, hekto, kilo, mega, giga, tera, peta, exa, zetta, yotta };
 
         #region memberVariables
-        protected DimensionUnit[] _dimensions = new Unit.DimensionUnit[7];
+        
+        public DimensionUnit[] _dimensions; // = new Unit.DimensionUnit[7];
         protected double _scale;  // To SI-units
         protected double _offset;  // To SI-units
 
@@ -304,6 +305,7 @@ namespace DimensionAndSort
 
         public Unit(int exp_metre, int exp_kilogram, int exp_second, int exp_ampere, int exp_kelvin, int exp_candela, int exp_mole, double scale = 1.0, double offset = 0.0, SI_PrefixEnum prefix = SI_PrefixEnum.unity)
         {
+            _dimensions = new DimensionUnit[7];
             _dimensions[(int)Unit.BaseUnitEnum.metre] = new Unit.DimensionUnit(exp_metre, Scalings.metre, SI_PrefixEnum.unity);
             _dimensions[(int)Unit.BaseUnitEnum.kilogram] = new Unit.DimensionUnit(exp_kilogram, Scalings.kilogram, SI_PrefixEnum.unity);
             _dimensions[(int)Unit.BaseUnitEnum.second] = new Unit.DimensionUnit(exp_second, Scalings.second, SI_PrefixEnum.unity);
@@ -381,9 +383,13 @@ namespace DimensionAndSort
 
         public static bool operator !=(Unit u1, Unit u2)
         {
-            if ((object)u1 == null || (object)u2 == null)
+            if ((object)u1 == null && (object)u2 == null)
             {
                 return false;
+            }
+            if ((object)u1 == null ^ (object)u2 == null)
+            {
+                return true;
             }
             else
             {
@@ -538,6 +544,9 @@ namespace DimensionAndSort
 
         public override string ToString()
         {
+            if(_dimensions == null) return String.Empty;
+
+
             StringBuilder sbTaljare = new StringBuilder();
             for (int i = 0; i <= 6; ++i)
             {

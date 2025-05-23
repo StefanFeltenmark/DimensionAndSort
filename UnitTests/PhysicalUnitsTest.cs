@@ -696,6 +696,20 @@ namespace UnitTests
         }
 
         [Fact]
+        public void EnergyEquivalentSumTest()
+        {
+            var u = (new WattHour(Unit.SI_PrefixEnum.mega)) / (new QubicHectoMetre()); // MWh/MM3
+
+            var e1 = new EnergyEquivalent(0.0, u);
+            var e2 = new EnergyEquivalent(0.41, u);
+
+
+            EnergyEquivalent sum = e1 + e2;
+
+            Assert.True(sum.Value.Equals(0.41));
+        }
+
+        [Fact]
         public void AreaLengthVolumeTest()
         {
             var v = new Volume(1, new QubicHectoMetre());

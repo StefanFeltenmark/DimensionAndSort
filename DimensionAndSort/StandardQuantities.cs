@@ -603,6 +603,11 @@
         private static Joule _energyUnit = new Joule();
         private static Kilogram _weightUnit = new Kilogram();
         private static Unit _specificEnergyUnit = _energyUnit / _weightUnit;
+
+        public SpecificEnergy()
+        {
+            
+        }
         public SpecificEnergy(SpecificEnergy e) : base(e.Value, e.Unit, e.PrefixIndex) { }
         public SpecificEnergy(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _specificEnergyUnit, prefix) { }
         public SpecificEnergy(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }

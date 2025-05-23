@@ -21,7 +21,7 @@ namespace DimensionAndSort
 
     }
 
-    public class QuantityBase : IComparable<QuantityBase>
+    public class QuantityBase :  IEquatable<QuantityBase> //,IComparable<QuantityBase>
     {
         #region members
         protected Unit _unit;
@@ -29,11 +29,12 @@ namespace DimensionAndSort
         protected Unit.SI_PrefixEnum _prefixIndex = Unit.SI_PrefixEnum.unity;
         #endregion
 
-        protected bool Equals(QuantityBase other)
+        public bool Equals(QuantityBase? other)
         {
             bool ok1 = _unit.Equals(other._unit);
+          //  bool ok3 = _prefixIndex == other._prefixIndex;
             bool ok2 = Math.Abs(ValueInSIUnits - other.ValueInSIUnits) < 1e-9;
-            return ok1 && ok2;
+            return ok1 && ok2; //&& ok3;
         }
 
         public override bool Equals(object? obj)
