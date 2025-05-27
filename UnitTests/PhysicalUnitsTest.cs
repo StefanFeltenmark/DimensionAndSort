@@ -1,6 +1,7 @@
 ﻿using System;
 using GreenOptimizer.DimensionAndSort;
 using Xunit;
+using System.Reflection;
 
 namespace UnitTests
 {
@@ -52,6 +53,38 @@ namespace UnitTests
         }
 
         [Fact]
+        public void TestLength5()
+        {
+            var l1 = new Length(100, Units.Lengths.Centimetre);
+
+            var l2 = new Length(1);
+
+            var l5 = l2 + l1;
+
+          
+
+            Assert.True(l5.Unit.Equals(Units.Metre));
+
+        }
+
+        [Fact]
+        public void TestLength6()
+        {
+            var l1 = new Length(1000, Units.Lengths.Millimetre);
+
+            var l2 = new Length(1);
+
+            var l5 = l2 + l1;
+
+            Assert.True(l5.Unit.Equals(Units.Metre));
+
+            var l6 = l5.ConvertToUnit(Units.Lengths.Kilometre);
+
+            string text = $"l6 = {l6}";
+
+        }
+
+        [Fact]
         public void TestVolume1()
         {
             var l1 = new Length(100, Unit.SI_PrefixEnum.milli);
@@ -65,6 +98,13 @@ namespace UnitTests
             Volume v1 = l1 * l2 * l3;
             
             Assert.True(v1.Unit.Equals(Units.QubicMetre));
+
+            Assert.Throws<IncompatibleUnits>(() =>
+                {
+                    var tests = v1.ConvertToDerivedUnit();
+                    return tests;
+                }
+            );
         }
 
 
@@ -114,6 +154,23 @@ namespace UnitTests
             Assert.True(t3 > t4);
 
         }
+
+        [Fact]
+        public void TestEinstein()
+        {
+            Mass m = new Mass(90);
+
+            var e = (m * QuantityBase.Pow(Constants.SpeedOfLight, 2)).AdjustPrefix(); // todo
+
+            e.AdjustPrefix();
+
+            
+            e.SetPrefix(Unit.SI_PrefixEnum.giga);
+
+            Assert.True(e.Unit.SameDimension(Units.WattHour));
+
+        }
+
 
         [Fact]
         public void TestAcceleration()
@@ -178,6 +235,15 @@ namespace UnitTests
         }
 
         [Fact]
+        public void TestPowerOf()
+        {
+            Length l = new Length(10, Unit.SI_PrefixEnum.centi);
+            
+            Volume v = QuantityBase.Pow(l, 3).ToUnit(Units.Litre);
+            Assert.True(v != null);
+        }
+
+        [Fact]
         public void TestGravity()
         {
             var m = new Mass(100);
@@ -206,14 +272,10 @@ namespace UnitTests
         public void TestTemperature()
         {
             var t1 = new Temperature(0, Units.Celsius);
-
-            var tc = t1.ValueInSIUnits;
-
             var t2 = new Temperature(32, Units.Farenheit);
+            var t3 = t1 + t2; // gives 273,15 degrees Celsius!
 
-            var tf = t2.ValueInSIUnits;
-
-            var t3 = t1 + t2; // gives 273,15 degress Celsius!
+            Assert.Equal(273.15, t3.Value, 2);
         }
 
         [Fact]
@@ -376,7 +438,7 @@ namespace UnitTests
 
             Volume q2 = q.ToUnit(Units.QubicHectoMetre);
 
-            Volume q3 = q2.CovertToUnit(Units.HourEquivalent);
+            Volume q3 = q2.ConvertToUnit(Units.HourEquivalent);
         }
 
 
@@ -440,10 +502,10 @@ namespace UnitTests
             var amount1 = new MonetaryAmount(100, Currencies.NorwegianCrown);
             var amount2 = new MonetaryAmount(100, Currencies.SwedishCrown);
 
-            MonetaryAmount amount3 = (amount1 + amount2).CovertToUnit(Currencies.USDollar);
+            MonetaryAmount amount3 = (amount1 + amount2).ConvertToUnit(Currencies.USDollar);
             var diff = amount1 - amount2;
 
-            MonetaryAmount amount4 = amount1.CovertToUnit(Currencies.Euro);
+            MonetaryAmount amount4 = amount1.ConvertToUnit(Currencies.Euro);
 
         }
 
@@ -492,7 +554,7 @@ namespace UnitTests
 
             e.SetPrefix(Unit.SI_PrefixEnum.kilo);
 
-            Energy e2 = e.CovertToUnit(Units.WattHour);
+            Energy e2 = e.ConvertToUnit(Units.WattHour);
         }
 
         [Fact]
@@ -517,7 +579,7 @@ namespace UnitTests
 
             var q = h1 * d;
 
-            var q2 = q.CovertToUnit(u).AdjustPrefix();
+            var q2 = q.ConvertToUnit(u).AdjustPrefix();
 
             var q3 = q.ToUnit(u);
         }
@@ -532,12 +594,46 @@ namespace UnitTests
         }
 
         [Fact]
+        public void TestPowerToEnergy()
+        {
+            Power p1 = new (1, Unit.SI_PrefixEnum.mega);
+            Time t = new Time(3600);
+
+            Unit MWh = new MegaWattHour();
+
+            Energy e = p1 * t;
+
+            e.SetUnit(MWh);
+
+            var e1 = e.ConvertToUnit(MWh);
+            
+            Assert.True(Math.Abs(e1.Value - 1.0) < 1e-6);
+
+            Assert.True(e1.Unit.Equals(MWh));
+        }
+
+        [Fact]
+        public void TestToDerived()
+        {
+            Force f = new Force(100, Unit.SI_PrefixEnum.kilo);
+            Length l = new Length(100);
+            Time t = new Time(3600);
+
+            var P = (f * l / t).ConvertToDerivedUnit();
+
+            
+
+            Assert.True(P.Unit.Equals(Units.Watt));
+
+        }
+
+        [Fact]
         public void TestEnergy2()
         {
             Unit GWh = new WattHour(Unit.SI_PrefixEnum.giga);
             Unit MWh = new WattHour(Unit.SI_PrefixEnum.mega);
-            var e1 = new Energy(300, GWh);
-            var e2 = e1.CovertToUnit(MWh);
+            Energy e1 = new(300, GWh);
+            var e2 = e1.ConvertToUnit(MWh);
 
             Assert.True(e2.Value.Equals(3e5));
 
@@ -551,7 +647,7 @@ namespace UnitTests
             var p1 = new Percentage(10);
             var p2 = new Percentage(25);
 
-            Energy e3 = ((p1 + p2) * e1).CovertToUnit(Units.MegaWattHour);
+            Energy e3 = ((p1 + p2) * e1).ConvertToUnit(Units.MegaWattHour);
 
             Assert.Equal(3.5e5, e3.ValueInSIUnits,3);
         }
@@ -560,9 +656,9 @@ namespace UnitTests
         public void MegaWattHourTest()
         {
             var e1 = new Energy(1, Unit.SI_PrefixEnum.mega);
-            Energy e2 = e1.CovertToUnit(Units.WattHour);
+            Energy e2 = e1.ConvertToUnit(Units.WattHour);
 
-            Energy e3 = e1.CovertToUnit(new WattHour(Unit.SI_PrefixEnum.mega));
+            Energy e3 = e1.ConvertToUnit(new WattHour(Unit.SI_PrefixEnum.mega));
         }
 
         [Fact]
@@ -572,7 +668,7 @@ namespace UnitTests
 
             var u = (new WattHour(Unit.SI_PrefixEnum.mega)) / (new Kilogram());
 
-            HeatingValue lhv2 = lhv1.CovertToUnit(u);
+            HeatingValue lhv2 = lhv1.ConvertToUnit(u);
         }
 
         [Fact]
@@ -584,7 +680,7 @@ namespace UnitTests
 
             var u1 = (new Joule(Unit.SI_PrefixEnum.giga)) / (new Kilogram(Unit.SI_PrefixEnum.kilo)); // kW/ton
 
-            SpecificEnergy e2 = e.CovertToUnit(u1);
+            SpecificEnergy e2 = e.ConvertToUnit(u1);
         }
 
         [Fact]
@@ -596,7 +692,21 @@ namespace UnitTests
 
             var u1 = (new WattHour(Unit.SI_PrefixEnum.mega)) / (new QubicHectoMetre()); // MWh/MM3
 
-            EnergyEquivalent e2 = e.CovertToUnit(u1);
+            EnergyEquivalent e2 = e.ConvertToUnit(u1);
+        }
+
+        [Fact]
+        public void EnergyEquivalentSumTest()
+        {
+            var u = (new WattHour(Unit.SI_PrefixEnum.mega)) / (new QubicHectoMetre()); // MWh/MM3
+
+            var e1 = new EnergyEquivalent(0.0, u);
+            var e2 = new EnergyEquivalent(0.41, u);
+
+
+            EnergyEquivalent sum = e1 + e2;
+
+            Assert.True(sum.Value.Equals(0.41));
         }
 
         [Fact]
@@ -604,24 +714,20 @@ namespace UnitTests
         {
             var v = new Volume(1, new QubicHectoMetre());
 
-            v.Value = 10;
-
             var l = new Length(10);
 
             Area a = v / l;
 
-            a = a.CovertToUnit(new SquareKilometer());
+            a = a.ConvertToUnit(new SquareKilometer());
 
 
-            Assert.True(Math.Abs(a.Value - 1) < 1e-3);
+            Assert.True(Math.Abs(a.Value - 0.1) < 1e-3);
         }
 
         [Fact]
         public void ScaleTest()
         {
             var v = new Volume(1, new QubicHectoMetre());
-
-            v.Value = 10;
 
             var v2 = new Volume(10, Units.Litre);
 
@@ -644,24 +750,103 @@ namespace UnitTests
 
         }
 
+        [Fact]
+        public void TestIncompatibleUnits2()
+        {
+
+            Length l = new Length(10);
+
+            Force f = new Force(100, Units.Newton, Unit.SI_PrefixEnum.kilo);
+
+            Assert.Throws<IncompatibleUnits>(() =>
+            {
+                Power p = f * l;
+            });
+
+
+        }
+
+        [Fact]
+        public void ReflectionTest()
+        {
+            Length l = new Length(10, new Metre(), Unit.SI_PrefixEnum.milli);
+            Unit matched = null;
+            foreach (Unit unit in Units.UnitList)
+            {
+                if (l.Unit == unit)
+                {
+                    matched = unit; 
+                    break;
+                }
+            }
+
+            Assert.True(matched == Units.Metre);
+        }
+
+        [Fact]
+        public void ReflectionTest2()
+        {
+            Mass m = new Mass(2);
+            Speed s = new Speed(3);
+            var kinetic = 0.5 * m * s * s;
+
+            Unit matched = null;
+            foreach (Unit unit in Units.UnitList)
+            {
+                if (kinetic.Unit == unit)
+                {
+                    matched = unit;
+                    break;
+                }
+            }
+
+            Assert.True(matched == Units.Joule);
+        }
+
+        [Fact]
+        public void TestHorsePower()
+        {
+            var EnginePower1 = new Power(450, Units.HorsePower);
+            var EnginePower2 = new Power(450, new Watt(Unit.SI_PrefixEnum.kilo));
+
+            bool test = EnginePower2 > EnginePower1;
+
+            Assert.True(test);
+
+        }
+
         public class MyImpulseUnit : Unit
         {
-            public static MyImpulseUnit myImpulseUnit = new MyImpulseUnit();
+            public static readonly MyImpulseUnit myImpulseUnit = new MyImpulseUnit();
 
-            public MyImpulseUnit() : base(1, 1, -1, 0, 0, 0, 0)
+            private MyImpulseUnit() : base(1, 1, -1, 0, 0, 0, 0)
             {
                 Scale = 3.1415;
             }
         }
 
-        public class MyImpulseQuantity : QuantityBase
+        private class MyImpulseQuantity : QuantityBase
         {
             public MyImpulseQuantity(double val, Unit u) : base(val, u)
             {
             }
         }
 
-        
+        [Fact]
+        public void TestDetectingUnits()
+        {
+            Length lc = new Length(10, Unit.SI_PrefixEnum.centi);
+            Length lm = new Length(10, Unit.SI_PrefixEnum.milli);
+            Length lk = new Length(10, Unit.SI_PrefixEnum.hekto);
+
+            Length L = lk + 2 * lm + 5 * lc;
+
+            var test1 = L.Unit.ToDerivedUnit();
+            var test2 = L.Unit.ToBaseUnit();
+            string label = L.ToString();
+
+        }
+
 
 
 

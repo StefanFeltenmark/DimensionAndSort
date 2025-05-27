@@ -13,7 +13,7 @@
     {
         private double _exchangeRateToEUR;
 
-        public Currency(string code) : base(0, 0, 0, 0, 0, 0, 0, 0)
+        public Currency(string code) : base(0, 0, 0, 0, 0, 0, 0)
         {
             Name = code;
             _exchangeRateToEUR = 1.0;
@@ -138,7 +138,7 @@
 
         public override QuantityBase Clone()
         {
-            return new MonetaryAmount(_value, _unit, _prefixIndex);
+            return new MonetaryAmount(Value, _unit, _prefixIndex);
         }
     }
 
@@ -166,7 +166,7 @@
 
         public UnitPrice ConvertToUnit(PriceUnit newunit)
         {
-            UnitPrice p = null;
+            UnitPrice p;
             if (newunit.Unit.SameDimension(PriceUnit.Unit))
             {
                 var factor1 = PriceUnit.Unit.FromSIUnit(1) / newunit.Unit.FromSIUnit(1);
@@ -184,23 +184,7 @@
             return p;
         }
 
-        //        Unit unit = newUnit;
-        //        double value = newUnit.FromSIUnit(ValueInSIUnits);
-        //    {
-        //    if (newUnit.SameDimension(_unit))
-        //    Quantity q = null;
-        //{
-
-        //public Quantity CovertToUnit(Unit newUnit)
-        //        Unit.SI_PrefixEnum prefixIndex = Unit.SI_PrefixEnum.unity;
-        //        q = new Quantity(value, unit, prefixIndex);
-        //    }
-        //    else
-        //    {
-        //        throw new IncompatibleUnits();
-        //    }
-        //    return q;
-        //}
+      
     }
 
     public class PriceUnit : ICloneable

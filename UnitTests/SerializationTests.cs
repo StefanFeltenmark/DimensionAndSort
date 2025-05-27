@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Xunit;
 using GreenOptimizer.DimensionAndSort;
 using Newtonsoft.Json;
@@ -21,54 +20,53 @@ namespace UnitTests
         }
 
         [Fact]
-        public void SerializePhysicalUnits()
+        public void SerializationTest02()
         {
-            EnergyEquivalent ee = new EnergyEquivalent(10);
+            List<Length> lengths = new List<Length>
+            {
+                new Length(10),
+                new Length(20),
+                new Length(25)
+            };
 
-            string label = ee.Unit.ToString();
+            var ttest = SerializeUnserializeObject(lengths);
 
-            EnergyEquivalent recreated = SerializeUnserializeObject<EnergyEquivalent>(ee);
+            Assert.Equal(ttest, lengths);
 
-            Assert.True(ee.Equals(recreated));
         }
 
         [Fact]
-        public void SerializeEnergyQuantity()
+        public void SerializationTest03()
         {
-            JsonSerializerSettings settings = new JsonSerializerSettings
+            List<Energy> objects = new List<Energy>
             {
-                NullValueHandling = NullValueHandling.Ignore,
-                TypeNameHandling = TypeNameHandling.None,
-                Formatting = Formatting.Indented,
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                new Energy(250000,new WattHour()),
+                new Energy(0.25*3600*1000000, new Joule()),
+                new Energy(0.25, new MegaWattHour()),
+                new Energy(0.25, new WattHour(Unit.SI_PrefixEnum.mega)),
+                new Energy(0.25,new WattHour(),Unit.SI_PrefixEnum.mega),
             };
 
-            List<Energy> array =
-                new List<Energy>();
+            var ttest = SerializeUnserializeObject(objects);
 
-            Energy e1 =
-                new Energy(300, new WattHour(Unit.SI_PrefixEnum.giga));
+            Assert.Equal(ttest, objects);
 
-            Energy e2 =
-                new Energy(200, new WattHour(Unit.SI_PrefixEnum.mega));
+        }
 
-            array.Add(e1);
-            array.Add(e2);
+        [Fact]
+        public void SerializationTest04()
+        {
+            var u = (new WattHour(Unit.SI_PrefixEnum.kilo)) / (new Kilogram(Unit.SI_PrefixEnum.kilo)); // kW/ton
 
-            string str = JsonConvert.SerializeObject(array, settings);
+            var e = new SpecificEnergy(7560.0, u);
 
-            string testFile = "energy_test.json";
+            var u1 = (new Joule(Unit.SI_PrefixEnum.giga)) / (new Kilogram(Unit.SI_PrefixEnum.kilo)); // kW/ton
 
-            File.WriteAllText(testFile, str);
-
-            string inString = File.ReadAllText(testFile);
-
-            List<Energy>? obj = JsonConvert.DeserializeObject<List<Energy>>(inString);
-
-            Assert.True(array.SequenceEqual(obj));
-
-
+            SpecificEnergy e2 = e.ConvertToUnit(u1);
+           
+            var ttest = SerializeUnserializeObject(e2);
+           
+            Assert.Equal(ttest, e2);
         }
 
         private T SerializeUnserializeObject<T>(T obj)
@@ -76,19 +74,21 @@ namespace UnitTests
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                TypeNameHandling = TypeNameHandling.None,
+                TypeNameHandling = TypeNameHandling.Auto,
                 Formatting = Formatting.Indented,
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ObjectCreationHandling = ObjectCreationHandling.Auto
             };
 
             JsonSerializer serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                TypeNameHandling = TypeNameHandling.None,
+                TypeNameHandling = TypeNameHandling.Auto,
                 Formatting = Formatting.Indented,
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ObjectCreationHandling = ObjectCreationHandling.Auto
             };
 
             serializer.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
@@ -96,7 +96,7 @@ namespace UnitTests
             TextWriter tw = new StringWriter();
             serializer.Serialize(tw, obj);
 
-            string jsonStr = tw.ToString();
+            string? jsonStr = tw.ToString();
 
             File.WriteAllText("unittest.json", jsonStr);
 

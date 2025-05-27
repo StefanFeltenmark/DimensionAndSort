@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 
 namespace GreenOptimizer.DimensionAndSort
 {
@@ -26,8 +26,17 @@ namespace GreenOptimizer.DimensionAndSort
         public static Unit.Scaling kelvin = new("K");
         public static Unit.Scaling candela = new("Ca");
         public static Unit.Scaling mole = new("M");
+    }
 
-
+    public class StandardScalings
+    {
+        public static Unit.Scaling metre = new("m");
+        public static Unit.Scaling kilogram = new("kg");
+        public static Unit.Scaling second = new("s");
+        public static Unit.Scaling ampere = new("A");
+        public static Unit.Scaling kelvin = new("K");
+        public static Unit.Scaling candela = new("Ca");
+        public static Unit.Scaling mole = new("M");
     }
 
 
@@ -100,12 +109,16 @@ namespace GreenOptimizer.DimensionAndSort
             }
 
 
-            public bool Equals(SIprefix other)
+            public bool Equals(SIprefix? other)
             {
-                bool equal = true;
-                equal = Math.Abs(_factor - other.Factor) < 1.0e-6;
-                equal = equal && _symbol.Equals(other.Symbol);
-                equal = equal && _name.Equals(other.Name);
+                bool equal = false;
+                if (other != null)
+                {
+                    equal = Math.Abs(_factor - other.Factor) < 1.0e-6;
+                    equal = equal && _symbol.Equals(other.Symbol);
+                    equal = equal && _name.Equals(other.Name);
+                }
+
                 return equal;
             }
 
@@ -224,7 +237,8 @@ namespace GreenOptimizer.DimensionAndSort
         public enum SI_PrefixEnum { yokto, zepto, atto, femto, piko, nano, mikro, milli, centi, deci, unity, deka, hekto, kilo, mega, giga, tera, peta, exa, zetta, yotta };
 
         #region memberVariables
-        protected DimensionUnit[] _dimensions = new Unit.DimensionUnit[7];
+        
+        public DimensionUnit[] _dimensions; // = new Unit.DimensionUnit[7];
         protected double _scale;  // To SI-units
         protected double _offset;  // To SI-units
 
@@ -271,22 +285,8 @@ namespace GreenOptimizer.DimensionAndSort
             _scale = f; // look at this: we may have a scale that comes from some other unit change, like for mmHg or Watthour. This will overwrite that value!
         }
 
-        public static Unit[] BaseUnits
-        {
-            get { return Unit._baseUnits; }
-        }
 
-        public static Unit[] DerivedUnits
-        {
-            get { return Unit._derivedUnits; }
-        }
-
-        public DimensionUnit[] Dimensions
-        {
-            get { return _dimensions; }
-            set { _dimensions = value; }
-        }
-
+        [JsonIgnore]
         public SIprefix Prefix
         {
             get { return _prefixes[(int)_prefixIndex]; }
@@ -300,6 +300,7 @@ namespace GreenOptimizer.DimensionAndSort
 
         public Unit(int exp_metre, int exp_kilogram, int exp_second, int exp_ampere, int exp_kelvin, int exp_candela, int exp_mole, double scale = 1.0, double offset = 0.0, SI_PrefixEnum prefix = SI_PrefixEnum.unity)
         {
+            _dimensions = new DimensionUnit[7];
             _dimensions[(int)Unit.BaseUnitEnum.metre] = new Unit.DimensionUnit(exp_metre, Scalings.metre, SI_PrefixEnum.unity);
             _dimensions[(int)Unit.BaseUnitEnum.kilogram] = new Unit.DimensionUnit(exp_kilogram, Scalings.kilogram, SI_PrefixEnum.unity);
             _dimensions[(int)Unit.BaseUnitEnum.second] = new Unit.DimensionUnit(exp_second, Scalings.second, SI_PrefixEnum.unity);
@@ -307,6 +308,11 @@ namespace GreenOptimizer.DimensionAndSort
             _dimensions[(int)Unit.BaseUnitEnum.kelvin] = new Unit.DimensionUnit(exp_kelvin, Scalings.kelvin, SI_PrefixEnum.unity);
             _dimensions[(int)Unit.BaseUnitEnum.candela] = new Unit.DimensionUnit(exp_candela, Scalings.candela, SI_PrefixEnum.unity);
             _dimensions[(int)Unit.BaseUnitEnum.mole] = new Unit.DimensionUnit(exp_mole, Scalings.mole, SI_PrefixEnum.unity);
+
+            if (scale <= 0)
+            {
+                throw new Exception("Scale must be positive");
+            }
 
             _scale = scale;
             _offset = offset;
@@ -361,17 +367,24 @@ namespace GreenOptimizer.DimensionAndSort
                                 q1._dimensions[(int)BaseUnitEnum.mole].Exponent * n);
         }
 
-        public static bool operator ==(Unit u1, Unit u2)
+        public static bool operator ==(Unit? u1, Unit? u2)
         {
-            if ((object)u1 == null) return false;
+            if ((object)u1 == null && (object)u2 == null) return true;
+            if ((object)u1 == null && (object)u2 != null) return false;
+            if ((object)u1 != null && (object)u2 == null) return false;
+
             return u1.Equals(u2);
         }
 
         public static bool operator !=(Unit u1, Unit u2)
         {
-            if ((object)u1 == null || (object)u2 == null)
+            if ((object)u1 == null && (object)u2 == null)
             {
                 return false;
+            }
+            if ((object)u1 == null ^ (object)u2 == null)
+            {
+                return true;
             }
             else
             {
@@ -410,8 +423,12 @@ namespace GreenOptimizer.DimensionAndSort
             {
 
             }
-            du.Scale = u.Scale;
-            du.PrefixIndex = u._prefixIndex;
+
+            if (du != null)
+            {
+                du.Scale = u.Scale;
+                du.PrefixIndex = u._prefixIndex;
+            }
 
             return du;
         }
@@ -430,7 +447,7 @@ namespace GreenOptimizer.DimensionAndSort
 
             #region IEqualityComparer<Unit> Members
 
-            public bool Equals(Unit x, Unit y)
+            public bool Equals(Unit? x, Unit? y)
             {
                 return x.Equals(y);
             }
@@ -446,6 +463,8 @@ namespace GreenOptimizer.DimensionAndSort
         #region IEquatable<Unit> Members
         public bool SameDimension(Unit other)
         {
+            if(other == null) return false;
+
             bool equals = true;
             for (int i = 0; i <= 6; ++i)
             {
@@ -472,7 +491,7 @@ namespace GreenOptimizer.DimensionAndSort
             return equals;
         }
 
-        public bool Equals(Unit other)
+        public bool Equals(Unit? other)
         {
             bool equals = true;
             if (ReferenceEquals(other, null))
@@ -491,11 +510,18 @@ namespace GreenOptimizer.DimensionAndSort
             return equals;
         }
 
-        public override bool Equals(object other_obj)
+        public override bool Equals(object? other_obj)
         {
             bool equals = true;
-            Unit other = other_obj as Unit;
-            @equals = other != null && this.Equals(other);
+
+            if (ReferenceEquals(other_obj, null)) return false;
+
+            if (ReferenceEquals(other_obj, this)) return true;
+
+            if(typeof(Unit) != other_obj.GetType()) return false;
+            
+            @equals = this.Equals((Unit)other_obj);
+            
             return equals;
         }
 
@@ -513,6 +539,9 @@ namespace GreenOptimizer.DimensionAndSort
 
         public override string ToString()
         {
+            if(_dimensions == null) return String.Empty;
+
+
             StringBuilder sbTaljare = new StringBuilder();
             for (int i = 0; i <= 6; ++i)
             {

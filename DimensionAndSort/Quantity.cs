@@ -1,4 +1,11 @@
-﻿namespace GreenOptimizer.DimensionAndSort
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+
+namespace DimensionAndSort
 {
     public class Quantity : QuantityBase
     {
@@ -14,23 +21,23 @@
 
     }
 
-    public class QuantityBase : IComparable<QuantityBase>
+    public class QuantityBase :  IEquatable<QuantityBase> //,IComparable<QuantityBase>
     {
         #region members
         protected Unit _unit;
-        protected double _value;
+        protected double _valueInSIUnits;
         protected Unit.SI_PrefixEnum _prefixIndex = Unit.SI_PrefixEnum.unity;
-        protected string _symbol;
         #endregion
 
-        protected bool Equals(QuantityBase other)
+        public bool Equals(QuantityBase? other)
         {
             bool ok1 = _unit.Equals(other._unit);
+          //  bool ok3 = _prefixIndex == other._prefixIndex;
             bool ok2 = Math.Abs(ValueInSIUnits - other.ValueInSIUnits) < 1e-9;
-            return ok1 && ok2;
+            return ok1 && ok2; //&& ok3;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -43,9 +50,9 @@
             unchecked
             {
                 var hashCode = (_unit != null ? _unit.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ _value.GetHashCode();
+                hashCode = (hashCode * 397) ^ _valueInSIUnits.GetHashCode();
                 hashCode = (hashCode * 397) ^ (int)_prefixIndex;
-                hashCode = (hashCode * 397) ^ (_symbol != null ? _symbol.GetHashCode() : 0);
+               
                 return hashCode;
             }
         }
@@ -62,6 +69,7 @@
             set { _prefixIndex = value; }
         }
 
+        [JsonIgnore]
         public Unit.SIprefix prefix
         {
             get { return Unit.Prefixes[(int)_prefixIndex]; }
@@ -69,41 +77,46 @@
 
         public double ValueInSIUnits
         {
-            get { return prefix.Factor * (_unit.Scale * _value + _unit.Offset); }
-            set { _value = value; }
+           // get { return prefix.Factor * (_unit.Scale * _value + _unit.Offset); }
+            get { return _valueInSIUnits;}
+            set { _valueInSIUnits = value; }
         }
 
+        public double ToSIUnit(double value, Unit unit, Unit.SI_PrefixEnum prefixIndex = Unit.SI_PrefixEnum.unity)
+        {
+            return Unit.Prefixes[(int) prefixIndex].Factor * (_unit.Scale * value + _unit.Offset);
+        }
+
+        [JsonIgnore]
         public double Value
         {
-            get { return _value; }
-            set { _value = value; }
+            get { return (_valueInSIUnits/prefix.Factor - _unit.Offset)/_unit.Scale; }
+           
         }
 
-        public string Symbol
-        {
-            get { return _symbol; }
-            set { _symbol = value; }
-        }
-
+        
         public QuantityBase(double value, Unit unit, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity, string symbol = "")
         {
             _unit = unit;
-            _value = value;
+            _valueInSIUnits = ToSIUnit(value, unit, prefix);
             _prefixIndex = prefix;
-            _symbol = symbol;
         }
 
         public QuantityBase()
         {
-            _unit = new Dimensionless();
-            _symbol = string.Empty;
+            _unit = new Unit();
+        }
+
+        public QuantityBase ConvertToDerivedUnit()
+        {
+            SetUnit(this.Unit.ToDerivedUnit());
+            return this;
         }
 
         public void SetUnit(Unit newUnit)
         {
-            if (newUnit.SameDimension(_unit))
+            if (_unit.SameDimension(newUnit))
             {
-                _value = newUnit.FromSIUnit(ValueInSIUnits);
                 _unit = newUnit;
                 _prefixIndex = Unit.SI_PrefixEnum.unity;
             }
@@ -113,9 +126,24 @@
             }
         }
 
-        public Quantity CovertToUnit(Unit newUnit)
+        public bool TrySetUnit(Unit newUnit)
         {
-            Quantity q = null;
+            if (newUnit.SameDimension(_unit))
+            {
+                _unit = newUnit;
+                _prefixIndex = Unit.SI_PrefixEnum.unity;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        
+        }
+
+        public Quantity ConvertToUnit(Unit newUnit)
+        {
+            Quantity q;
             if (newUnit.SameDimension(_unit))
             {
                 double value = newUnit.FromSIUnit(ValueInSIUnits);
@@ -220,16 +248,17 @@
         }
 
         /// <summary>
-        /// Find prefix that gives a value as clode to 1 a possible
+        /// Find prefix that gives a value as close to 1 a possible
         /// </summary>
         public QuantityBase AdjustPrefix()
         {
-            double minval = Math.Abs(_value - 1); 
+            double val = Value;
+            double minval = Math.Abs(val - 1); 
             Unit.SI_PrefixEnum minind = _prefixIndex;
             foreach (Unit.SI_PrefixEnum sIprefix in Enum.GetValues(typeof(Unit.SI_PrefixEnum)))
             {
                 Unit.SIprefix  pref = Unit.Prefixes[(int) sIprefix];
-                double newValue =  Math.Abs(_value*prefix.Factor / pref.Factor - 1);
+                double newValue =  Math.Abs(val*prefix.Factor / pref.Factor - 1);
                 if (newValue < minval)
                 {
                     minval = newValue;
@@ -247,21 +276,30 @@
 
         public void SetPrefix(Unit.SI_PrefixEnum newprefix)
         {
-            this._value *= prefix.Factor / Unit.Prefixes[(int)newprefix].Factor;
-            PrefixIndex = newprefix;
+            //this. *= prefix.Factor / Unit.Prefixes[(int)newprefix].Factor;
+            _prefixIndex = newprefix;
         }
 
         public override string ToString()
         {
             string str = "";
 
-            if (_value >= 0.01)
+            string unitString = " "  + _unit;
+
+
+            if (_prefixIndex != Unit.SI_PrefixEnum.unity)
             {
-                str = _value.ToString("0.00") + " " + prefix.Symbol + _unit;
+                unitString = " " + prefix.Symbol + _unit;
+            }
+            
+
+            if (Value >= 0.01)
+            {
+                str = Value.ToString("0.00") + unitString;
             }
             else
             {
-                str = _value.ToString("e2") + " " + prefix.Symbol + _unit;
+                str = Value.ToString("e2") + unitString;
             }
 
             return str;
@@ -270,7 +308,7 @@
 
         public virtual QuantityBase Clone()
         {
-            return new QuantityBase(_value, _unit, _prefixIndex);
+            return new QuantityBase(Value, _unit, _prefixIndex);
         }
 
 

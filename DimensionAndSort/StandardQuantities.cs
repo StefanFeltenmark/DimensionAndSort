@@ -1,9 +1,9 @@
-﻿namespace GreenOptimizer.DimensionAndSort
+namespace GreenOptimizer.DimensionAndSort
 {
     public class Length : QuantityBase
     {
 
-        public Length(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, new Metre(), prefix) { }
+        public Length(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, Units.Metre, prefix) { }
 
         public Length(double val, Unit unit, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, unit, prefix) { }
 
@@ -14,7 +14,7 @@
         public static implicit operator Length(double val) { return new Length(val); }
         public static implicit operator Length(Quantity mq)
         {
-            if (mq.Unit.SameDimension(new Metre()))
+            if (mq.Unit.SameDimension(Units.Metre))
             {
                 return new Length(mq.Value, mq.Unit, mq.PrefixIndex);
             }
@@ -41,7 +41,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Length(_value, _unit, _prefixIndex);
+            return new Length(Value, _unit, _prefixIndex);
         }
     }
 
@@ -78,13 +78,14 @@
 
         public override QuantityBase Clone()
         {
-            return new Time(_value, _unit, _prefixIndex);
+            return new Time(Value, _unit, _prefixIndex);
         }
     }
 
     public class Mass : QuantityBase
     {
-        protected static Kilogram _kilo = new Kilogram();
+        protected static Kilogram _kilo = Units.Kilogram;
+
         public Mass(double val) : base(val, _kilo) { }
         public Mass(double val, Unit unit) : base(val, unit) { }
         public Mass(double val, Unit unit, Unit.SI_PrefixEnum prefix) : base(val, unit, prefix) { }
@@ -93,7 +94,6 @@
         {
 
         }
-
 
         public static implicit operator Mass(double val)
         {
@@ -122,7 +122,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Mass(_value, _unit, _prefixIndex);
+            return new Mass(Value, _unit, _prefixIndex);
         }
     }
 
@@ -168,7 +168,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Temperature(_value, _unit, _prefixIndex);
+            return new Temperature(Value, _unit, _prefixIndex);
         }
     }
 
@@ -191,7 +191,7 @@
 
         public override QuantityBase Clone()
         {
-            return new DimensionlessQuantity(_value, _prefixIndex);
+            return new DimensionlessQuantity(Value, _prefixIndex);
         }
     }
 
@@ -215,7 +215,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Percentage(_value);
+            return new Percentage(Value);
         }
 
 
@@ -258,7 +258,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Volume(_value, _unit, _prefixIndex);
+            return new Volume(Value, _unit, _prefixIndex);
         }
 
     }
@@ -298,7 +298,7 @@
 
         public override QuantityBase Clone()
         {
-            return new VolumeFlow(_value, _unit, _prefixIndex);
+            return new VolumeFlow(Value, _unit, _prefixIndex);
         }
 
     }
@@ -332,7 +332,7 @@
 
         public override QuantityBase Clone()
         {
-            return new MassFlow(_value, _unit, _prefixIndex);
+            return new MassFlow(Value, _unit, _prefixIndex);
         }
 
     }
@@ -373,7 +373,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Area(_value, _unit, _prefixIndex);
+            return new Area(Value, _unit, _prefixIndex);
         }
 
 
@@ -410,7 +410,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Speed(_value, _unit, _prefixIndex);
+            return new Speed(Value, _unit, _prefixIndex);
         }
 
     }
@@ -445,7 +445,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Acceleration(_value, _unit, _prefixIndex);
+            return new Acceleration(Value, _unit, _prefixIndex);
         }
 
     }
@@ -494,7 +494,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Energy(_value, _unit, _prefixIndex);
+            return new Energy(Value, _unit, _prefixIndex);
         }
 
     }
@@ -546,7 +546,7 @@
 
         public override QuantityBase Clone()
         {
-            return new EnergyEquivalent(_value, _unit, _prefixIndex);
+            return new EnergyEquivalent(Value, _unit, _prefixIndex);
         }
 
     }
@@ -593,7 +593,7 @@
 
         public override QuantityBase Clone()
         {
-            return new HeatingValue(_value, _unit, _prefixIndex);
+            return new HeatingValue(Value, _unit, _prefixIndex);
         }
 
     }
@@ -603,6 +603,11 @@
         private static Joule _energyUnit = new Joule();
         private static Kilogram _weightUnit = new Kilogram();
         private static Unit _specificEnergyUnit = _energyUnit / _weightUnit;
+
+        public SpecificEnergy()
+        {
+            
+        }
         public SpecificEnergy(SpecificEnergy e) : base(e.Value, e.Unit, e.PrefixIndex) { }
         public SpecificEnergy(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _specificEnergyUnit, prefix) { }
         public SpecificEnergy(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
@@ -639,7 +644,7 @@
 
         public override QuantityBase Clone()
         {
-            return new SpecificEnergy(_value, _unit, _prefixIndex);
+            return new SpecificEnergy(Value, _unit, _prefixIndex);
         }
 
     }
@@ -685,7 +690,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Force(_value, _unit, _prefixIndex);
+            return new Force(Value, _unit, _prefixIndex);
         }
 
     }
@@ -731,7 +736,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Pressure(_value, _unit, _prefixIndex);
+            return new Pressure(Value, _unit, _prefixIndex);
         }
 
     }
@@ -768,7 +773,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Density(_value, _unit, _prefixIndex);
+            return new Density(Value, _unit, _prefixIndex);
         }
 
     }
@@ -958,7 +963,7 @@
         public Power(Power p) : base(p.Value, p.Unit, p.PrefixIndex) { }
         public Power(double val = 0.0) : base(val, _watt) { }
         public Power(double val = 0.0, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _watt, prefix) { }
-        public Power(double val = 0.0, Unit u = null, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
+        public Power(double val = 0.0, Unit? u = null, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
 
         public Power()
         {

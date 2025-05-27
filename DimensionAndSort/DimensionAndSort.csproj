@@ -5,13 +5,30 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Title>Dimension and sort</Title>
+    <Title>Dimension and Sort</Title>
     <Authors>Stefan Feltenmark</Authors>
-    <Company>Green Optimizer</Company>
-    <Description>Class library for handling physical quantities.</Description>
-    <PackageTags>dimension, sort, quantities, physics</PackageTags>
-    <PackageReleaseNotes>First release.</PackageReleaseNotes>
-    <PackageId>dimension-and-sort</PackageId>
+    <Description>C# class library for representing quantities (force, energy, lenght) and their units (m, s, W, J).</Description>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageId>DimensionAndSort</PackageId>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENCE.txt</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Version>1.0.2</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENCE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
 
 </Project>

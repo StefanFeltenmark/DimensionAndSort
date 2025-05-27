@@ -1,12 +1,26 @@
-﻿namespace GreenOptimizer.DimensionAndSort
+namespace GreenOptimizer.DimensionAndSort
 {
     public class Units
     {
+        public static List<Unit> UnitList;
+
         static Units()
         {
-
+            UnitList = new List<Unit>()
+            {
+                Metre, Kilogram, Second, Ampere, Kelvin, Joule
+            };
         }
-        public static Metre Metre = new Metre();
+
+        public static class Lengths
+        {
+            public static readonly Metre Metre = new();
+            public static readonly Centimetre Centimetre = new();
+            public static readonly Unit Millimetre = new Metre(){ PrefixIndex = Unit.SI_PrefixEnum.milli, Scale = 1e-3};
+            public static readonly Unit Kilometre = new Metre() { PrefixIndex = Unit.SI_PrefixEnum.kilo, Scale = 1e3 };
+        }
+
+        public static readonly Metre Metre = new();
         public static Kilogram Kilogram = new Kilogram();
         public static Second Second = new Second();
         public static Ampere Ampere = new Ampere();
@@ -33,6 +47,7 @@
         public static Volt Volt = new Volt();
         public static Watt Watt = new Watt();
         public static MegaWatt MegaWatt = new MegaWatt();
+        public static HorsePower HorsePower = new HorsePower();
         public static Bar Bar = new Bar();
         public static mmHg mmHg = new mmHg();
         public static Litre Litre = new Litre();
@@ -72,6 +87,14 @@
         }
     }
 
+    public abstract class VolumeUnit : Unit
+    {
+        protected VolumeUnit() : base(3, 0, 0, 0, 0, 0, 0)
+        {
+
+        }
+    }
+
     #region PredefinedUnits
 
     public class Dimensionless : Unit
@@ -95,6 +118,19 @@
         public Metre() { }
     }
 
+    public class Centimetre : Metre
+    {
+        public Centimetre()
+        {
+            Scale = 0.01;
+        }
+
+        public override string ToString()
+        {
+            return "cm";
+        }
+    }
+
     public class Masl : Metre
     {
         public Masl() { }
@@ -105,9 +141,10 @@
         }
     }
 
-    public class QubicMetre : Unit
+    public class QubicMetre : VolumeUnit
     {
-        public QubicMetre() : base(3, 0, 0, 0, 0, 0, 0) { }
+        public QubicMetre() { }
+
     }
 
     public class QubicMetrePerSecond : Unit
@@ -168,22 +205,29 @@
     #endregion
 
     #region VolumeUnits
-    public class Litre : Unit
+    public class Litre : VolumeUnit
     {
-        public Litre() : base(3, 0, 0, 0, 0, 0, 0) { this.Scale = 1e-3; }
+        public Litre()
+        {
+            this.Scale = 1e-3; // compared to SI-unit m^3
+        }
         public override string ToString() { return "l"; }
     }
 
 
-    public class HourEquivalent : Unit
+    public class HourEquivalent : VolumeUnit
     {
-        public HourEquivalent() : base(3, 0, 0, 0, 0, 0, 0) { this.Scale = 3600; }
+        public HourEquivalent() { this.Scale = 3600; }
         public override string ToString() { return "HE"; }
     }
 
-    public class QubicHectoMetre : Unit
+    public class QubicHectoMetre : VolumeUnit
     {
-        public QubicHectoMetre() : base(3, 0, 0, 0, 0, 0, 0, 1e6) { }
+        public QubicHectoMetre()
+        {
+            Scale = 1e6;
+
+        }
         public override string ToString()
         {
             return "hm3";
@@ -266,6 +310,16 @@
     {
         public Coulomb() : base(0, 0, 1, 1, 0, 0, 0) { }
         public override string ToString() { return "C"; }
+    }
+
+    public class AmpereHour : Coulomb
+    {
+        public AmpereHour()
+        {
+            _scale = 3600;
+
+        }
+        public override string ToString() { return "Ah"; }
     }
 
     public class Volt : Unit
@@ -394,6 +448,7 @@
         public override string ToString() { return Prefix + "J"; }
     }
 
+    
     public class WattHour : Unit
     {
         public WattHour(SI_PrefixEnum prefixIndex = SI_PrefixEnum.unity) : base(2, 1, -2, 0, 0, 0, 0)
@@ -462,25 +517,31 @@
         public override string ToString() { return "W"; }
     }
 
-    public class MegaWatt : Unit
+    public class MegaWatt : Watt
     {
-        public MegaWatt() : base(2, 1, -3, 0, 0, 0, 0) { Scale = 1e6; }
+        public MegaWatt()
+        {
+            Scale = 1e6;
+        }
 
         public override string ToString() { return "MW"; }
     }
 
-    public class MegaWattHour : Unit
+    public class MegaWattHour : Joule
     {
-        public MegaWattHour() : base(2, 1, -2, 0, 0, 0, 0)
+        public MegaWattHour() 
         {
-            Scale = 1e6;
+            Scale = 3600*1e6;
         }
         public override string ToString() { return "MWh"; }
     }
 
-    public class HorsePower : Unit
+    public class HorsePower : Watt
     {
-        public HorsePower() : base(2, 1, -3, 0, 0, 0, 0) { Scale = 745.7; }
+        public HorsePower()
+        {
+            Scale = 745.7;
+        }
         public override string ToString() { return "hp"; }
     }
     #endregion
