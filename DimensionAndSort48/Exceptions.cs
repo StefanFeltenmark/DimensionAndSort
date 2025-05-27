@@ -1,4 +1,6 @@
-﻿namespace GreenOptimizer.DimensionAndSort
+﻿using System;
+
+namespace GreenOptimizer.DimensionAndSort
 {
     public class Exceptions
     {

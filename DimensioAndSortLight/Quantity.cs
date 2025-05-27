@@ -1,4 +1,6 @@
-﻿namespace GreenOptimizer.DimensionAndSort
+﻿using System.Text.Json.Serialization;
+
+namespace GreenOptimizer.DimensionAndSort
 {
     public class Quantity : QuantityBase
     {
@@ -10,6 +12,11 @@
         public Quantity(Quantity q) : base(q.Value, q.Unit, q.PrefixIndex)
         {
 
+        }
+
+        public Quantity()
+        {
+            
         }
 
     }
@@ -62,7 +69,8 @@
             set { _prefixIndex = value; }
         }
 
-        public Unit.SIprefix prefix
+        [JsonIgnore]
+        protected Unit.SIprefix prefix
         {
             get { return Unit.Prefixes[(int)_prefixIndex]; }
         }
@@ -79,11 +87,7 @@
             set { _value = value; }
         }
 
-        public string Symbol
-        {
-            get { return _symbol; }
-            set { _symbol = value; }
-        }
+       
 
         public QuantityBase(double value, Unit unit, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity, string symbol = "")
         {

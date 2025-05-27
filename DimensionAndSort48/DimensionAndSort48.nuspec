@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>DimensionAndSort</id>
+    <version>1.0.1</version>
+    <title>Dimension and Sort</title>
+    <authors>Stefan Feltenmark</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <!-- <icon>icon.png</icon> -->
+    <projectUrl>https://github.com/StefanFeltenmark/DimensionAndSort</projectUrl>
+    <description>Library for representing physical quantities</description>
+    <releaseNotes>Signed</releaseNotes>
+    <copyright>Green Optimizer</copyright>
+    <tags>quantities, sort, units</tags>
+	<readme>README.md</readme>
+  </metadata>
+  <files>
+        <file src=".\bin\Release\DimensionAndSort48.dll" target="lib\net48"/>
+		<file src="README.md" target="\"/>
+    </files>
+</package>

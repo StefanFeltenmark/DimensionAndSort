@@ -64,7 +64,7 @@ namespace UnitTests
 
             string inString = File.ReadAllText(testFile);
 
-            List<Energy>? obj = JsonConvert.DeserializeObject<List<Energy>>(inString);
+            List<Energy> obj = JsonConvert.DeserializeObject<List<Energy>>(inString);
 
             Assert.True(array.SequenceEqual(obj));
 

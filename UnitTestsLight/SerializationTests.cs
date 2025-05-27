@@ -14,6 +14,31 @@ namespace UnitTests
         {
             Length l = new Length(10);
 
+            DoTestSerialization(l);
+        }
+
+        
+        public static void DoTestSerialization<T>(T obj)
+        {
+            Assert.Equal(obj, SerializeUnserializeObject(obj));
+        }
+
+        [Fact]
+        public void SerializationTest02()
+        {
+            Length l = new Length(10, Unit.SI_PrefixEnum.kilo);
+
+            DoTestSerialization(l);
+
+        }
+
+        [Fact]
+        public void SerializationTest03()
+        {
+            Unit km = new Unit(1, 0, 0, 1000, 0);
+            
+            Length l = new Length(10, km);
+
             Length l2 = SerializeUnserializeObject(l);
 
             Assert.Equal(l,l2);
@@ -71,24 +96,26 @@ namespace UnitTests
 
         }
 
-        private T SerializeUnserializeObject<T>(T obj)
+        private static  T SerializeUnserializeObject<T>(T obj)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                TypeNameHandling = TypeNameHandling.None,
+                TypeNameHandling = TypeNameHandling.Auto,
                 Formatting = Formatting.Indented,
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                ReferenceLoopHandling = ReferenceLoopHandling.Error,
+                ObjectCreationHandling = ObjectCreationHandling.Auto
             };
 
             JsonSerializer serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                TypeNameHandling = TypeNameHandling.None,
+                TypeNameHandling = TypeNameHandling.Auto,
                 Formatting = Formatting.Indented,
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                ReferenceLoopHandling = ReferenceLoopHandling.Error,
+                ObjectCreationHandling = ObjectCreationHandling.Auto
             };
 
             serializer.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
@@ -98,7 +125,7 @@ namespace UnitTests
 
             string jsonStr = tw.ToString();
 
-            File.WriteAllText("unittest.json", jsonStr);
+            File.WriteAllText($"unittest{obj.GetType()}.json", jsonStr);
 
             T recreated = JsonConvert.DeserializeObject<T>(jsonStr, settings);
 
@@ -106,7 +133,7 @@ namespace UnitTests
             serializer.Serialize(tw, recreated);
             string jsonStr2 = tw.ToString();
 
-            File.WriteAllText("unittest2.json", jsonStr2);
+            File.WriteAllText($"unittest2{obj.GetType()}.json", jsonStr2);
 
             return recreated;
 

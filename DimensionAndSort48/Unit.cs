@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace GreenOptimizer.DimensionAndSort
 {
@@ -6,27 +9,27 @@ namespace GreenOptimizer.DimensionAndSort
     public class Scalings
     {
         // length
-        public static Unit.Scaling metre = new("m");
-        public static Unit.Scaling foot = new("ft", 0.3048);
-        public static Unit.Scaling inch = new("in", 0.0254);
-        public static Unit.Scaling mile = new("mi", 1609.344);
+        public static Unit.Scaling metre = new Unit.Scaling("m");
+        public static Unit.Scaling foot = new Unit.Scaling("ft", 0.3048);
+        public static Unit.Scaling inch = new Unit.Scaling("in", 0.0254);
+        public static Unit.Scaling mile = new Unit.Scaling("mi", 1609.344);
 
         // weight
-        public static Unit.Scaling kilogram = new("kg");
-        public static Unit.Scaling ton = new("ton", 1000);
+        public static Unit.Scaling kilogram = new Unit.Scaling("kg");
+        public static Unit.Scaling ton = new Unit.Scaling("ton", 1000);
 
         // time
-        public static Unit.Scaling second = new("s");
-        public static Unit.Scaling hour = new("h", 3600);
-        public static Unit.Scaling minute = new("min", 60);
-        public static Unit.Scaling dayAndNight = new("d", 86400);
-        public static Unit.Scaling week = new("w", 604800);
-
-        public static Unit.Scaling ampere = new("A");
-        public static Unit.Scaling kelvin = new("K");
-        public static Unit.Scaling candela = new("Ca");
-        public static Unit.Scaling mole = new("M");
-
+        public static Unit.Scaling second = new Unit.Scaling("s");
+        public static Unit.Scaling hour = new Unit.Scaling("h", 3600);
+        public static Unit.Scaling minute = new Unit.Scaling("min", 60);
+        public static Unit.Scaling dayAndNight = new Unit.Scaling("d", 86400);
+        public static Unit.Scaling week = new Unit.Scaling("w", 604800);
+            
+        public static Unit.Scaling ampere = new Unit.Scaling("A");
+        public static Unit.Scaling kelvin = new Unit.Scaling("K");
+        public static Unit.Scaling candela = new Unit.Scaling("Ca"); 
+        public static Unit.Scaling mole = new Unit.Scaling("M");
+            
 
     }
 
@@ -139,11 +142,7 @@ namespace GreenOptimizer.DimensionAndSort
                 _factor = factor;
             }
 
-            public Scaling()
-            {
-                _symbol = "";
-                _factor = 1.0;
-            }
+           
 
             public bool Equals(Scaling other)
             {
@@ -204,12 +203,7 @@ namespace GreenOptimizer.DimensionAndSort
                 _scaling = scale;
             }
 
-            public DimensionUnit()
-            {
-                _exponent = 0;
-                _SI_prefix = SI_PrefixEnum.unity;
-                _scaling = new Scaling();
-            }
+           
 
             public override string ToString()
             {

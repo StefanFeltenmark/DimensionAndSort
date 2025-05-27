@@ -1,9 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Dimension and sort</Title>
+    <Authors>Stefan Feltenmark</Authors>
+    <Company>Green Optimizer</Company>
+    <Description>Class library for handling physical quantities.</Description>
+    <PackageTags>dimension, sort, quantities, physics</PackageTags>
+    <PackageReleaseNotes>First release.</PackageReleaseNotes>
+    <PackageId>dimension-and-sort</PackageId>
   </PropertyGroup>
 
 </Project>

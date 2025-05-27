@@ -63,7 +63,7 @@ namespace UnitTests
             var l4 = l2 + l1;
 
             Volume v1 = l1 * l2 * l3;
-            
+
             Assert.True(v1.Unit.Equals(Units.QubicMetre));
         }
 
@@ -125,7 +125,7 @@ namespace UnitTests
 
             var l1 = new Length(100, Units.Metre, Unit.SI_PrefixEnum.milli);
 
-            Acceleration? a = null;
+            Acceleration a = null;
             try
             {
                 a = l1 / r;
@@ -144,7 +144,7 @@ namespace UnitTests
         {
             var t1 = new Time(1, Units.Second);
             var l1 = new Length(100, Units.Metre);
-            
+
             Speed s1 = l1 / t1;
 
             s1.SetUnit(Units.Mph);
@@ -198,7 +198,7 @@ namespace UnitTests
             var g = new Acceleration(9.82);
 
             Force f = m * g;
-            
+
             Console.Out.Write("f = " + f);
         }
 
@@ -283,7 +283,7 @@ namespace UnitTests
 
             Voltage U = R * I;
 
-            Assert.Equal(5,U.Value,2);
+            Assert.Equal(5, U.Value, 2);
             Assert.True(U.Unit.Equals(Units.Volt));
         }
 
@@ -310,7 +310,7 @@ namespace UnitTests
             Power P3 = (QuantityBase.Pow(U, 2) / R).ToPrefix(Unit.SI_PrefixEnum.kilo);
 
             var t = new Time(1, Units.Hour);
-            
+
             Energy e = (P2 - P3) * t;
 
         }
@@ -414,7 +414,7 @@ namespace UnitTests
         [Fact]
         public void TestToDerivedUnit3()
         {
-            var u = Units.Watt*Units.Hour;
+            var u = Units.Watt * Units.Hour;
 
             Assert.True(u.Equals(Units.WattHour));
         }
@@ -501,10 +501,10 @@ namespace UnitTests
             var m = new Mass(90, new Kilogram(Unit.SI_PrefixEnum.mega));
             var a = new Acceleration(10);
 
-            Force f =  m * a;
+            Force f = m * a;
 
             f.AdjustPrefix();
-            
+
         }
 
         [Fact]
@@ -553,7 +553,7 @@ namespace UnitTests
 
             Energy e3 = ((p1 + p2) * e1).CovertToUnit(Units.MegaWattHour);
 
-            Assert.Equal(3.5e5, e3.ValueInSIUnits,3);
+            Assert.Equal(3.5e5, e3.ValueInSIUnits, 3);
         }
 
         [Fact]
@@ -597,6 +597,17 @@ namespace UnitTests
             var u1 = (new WattHour(Unit.SI_PrefixEnum.mega)) / (new QubicHectoMetre()); // MWh/MM3
 
             EnergyEquivalent e2 = e.CovertToUnit(u1);
+        }
+
+        [Fact]
+        public void TestEnergy3()
+        {
+            Power p1 = new Power(100);
+            Time t = new Time(100, Units.Minute);
+
+            Energy e = (p1 * t).ToUnit(Units.WattHour);
+
+            Assert.True(e.ValueInSIUnits == (100*60)*100);
         }
 
         [Fact]

@@ -13,7 +13,7 @@
     {
         private double _exchangeRateToEUR;
 
-        public Currency(string code) : base(0, 0, 0, 0, 0, 0, 0, 0)
+        public Currency(string code) : base(0, 0, 0)
         {
             Name = code;
             _exchangeRateToEUR = 1.0;

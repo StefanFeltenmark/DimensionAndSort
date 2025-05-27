@@ -9,6 +9,7 @@ namespace UnitTests
     /// </summary>
     public class PhysicalUnitsTest
     {
+
         [Fact]
         public void TestLength1()
         {
@@ -19,6 +20,7 @@ namespace UnitTests
             var l3 = l1 + l2;
 
             Assert.True(l3.Unit.Equals(Units.Metre));
+            SerializationTests.DoTestSerialization(l3);
         }
 
         [Fact]
@@ -33,7 +35,7 @@ namespace UnitTests
             l4.SetPrefix(Unit.SI_PrefixEnum.milli);
 
             Assert.True(l4.PrefixIndex == Unit.SI_PrefixEnum.milli);
-
+            SerializationTests.DoTestSerialization(l4);
         }
 
         [Fact]
@@ -48,7 +50,7 @@ namespace UnitTests
             var l6 = l1 - l2;
 
             Assert.True(l5.Equals(-l6));
-
+            SerializationTests.DoTestSerialization(l5);
         }
 
         [Fact]
@@ -65,6 +67,7 @@ namespace UnitTests
             Volume v1 = l1 * l2 * l3;
             
             Assert.True(v1.Unit.Equals(Units.QubicMetre));
+            SerializationTests.DoTestSerialization(v1);
         }
 
 
@@ -74,6 +77,7 @@ namespace UnitTests
             Volume v1 = new Volume(100);
 
             v1.SetUnit(Units.HourEquivalent);
+            SerializationTests.DoTestSerialization(v1);
         }
 
         [Fact]
@@ -86,6 +90,7 @@ namespace UnitTests
             DimensionlessQuantity r = l2 / l1;
 
             Assert.True(r.Unit.SameDimension(Units.Dimensionless));
+            SerializationTests.DoTestSerialization(r);
         }
 
         [Fact]
@@ -99,6 +104,7 @@ namespace UnitTests
 
             Assert.True(a.Value.Equals(0.1));
             Assert.True(a.Unit.Equals(Units.SquareMetre));
+            SerializationTests.DoTestSerialization(a);
 
         }
 
@@ -112,6 +118,7 @@ namespace UnitTests
             var t4 = t1 - t2;
 
             Assert.True(t3 > t4);
+            SerializationTests.DoTestSerialization(t1);
 
         }
 
@@ -136,23 +143,10 @@ namespace UnitTests
             }
 
             Assert.True(a is Acceleration);
-
+            SerializationTests.DoTestSerialization(a);
         }
 
-        [Fact]
-        public void TestSpeed1()
-        {
-            var t1 = new Time(1, Units.Second);
-            var l1 = new Length(100, Units.Metre);
-            
-            Speed s1 = l1 / t1;
-
-            s1.SetUnit(Units.Mph);
-
-
-            // should be 
-            Assert.Equal(223.693629, s1.Value, 6);
-        }
+       
 
         [Fact]
         public void TestSpeed2()
@@ -167,6 +161,7 @@ namespace UnitTests
             var s3 = s1 + s2;
 
             var s = s3.ToString();
+            SerializationTests.DoTestSerialization(s3);
         }
 
         [Fact]
@@ -175,6 +170,7 @@ namespace UnitTests
             var v1 = new Volume(2, Units.HourEquivalent);
             var v2 = new Volume(1000, Unit.SI_PrefixEnum.hekto);
             var v3 = v1 + v2;
+            SerializationTests.DoTestSerialization(v3);
         }
 
         [Fact]
@@ -198,22 +194,10 @@ namespace UnitTests
             var g = new Acceleration(9.82);
 
             Force f = m * g;
+
+            SerializationTests.DoTestSerialization(f);
             
             Console.Out.Write("f = " + f);
-        }
-
-        [Fact]
-        public void TestTemperature()
-        {
-            var t1 = new Temperature(0, Units.Celsius);
-
-            var tc = t1.ValueInSIUnits;
-
-            var t2 = new Temperature(32, Units.Farenheit);
-
-            var tf = t2.ValueInSIUnits;
-
-            var t3 = t1 + t2; // gives 273,15 degress Celsius!
         }
 
         [Fact]
@@ -230,6 +214,8 @@ namespace UnitTests
             var vdiff = v1 - v2;
 
             Area a = v2 / l1;
+
+            SerializationTests.DoTestSerialization(a);
         }
 
         [Fact]
@@ -248,6 +234,8 @@ namespace UnitTests
             Time t5 = multiplier * t1;
 
             t5.SetUnit(t1.Unit);
+
+            SerializationTests.DoTestSerialization(t5);
         }
 
         [Fact]
@@ -272,48 +260,11 @@ namespace UnitTests
 
             //  potential.SetUnit(Units.Joule);
             potential.SetPrefix(Unit.SI_PrefixEnum.kilo);
+
+            SerializationTests.DoTestSerialization(potential);
         }
 
-        [Fact]
-        public void TestOhmsLaw()
-        {
-            //trying ohms famous law...
-            var R = new Resistance(1);
-            var I = new Current(5);
-
-            Voltage U = R * I;
-
-            Assert.Equal(5,U.Value,2);
-            Assert.True(U.Unit.Equals(Units.Volt));
-        }
-
-        [Fact]
-        public void TestPower1()
-        {
-            var U = new Voltage(20, Unit.SI_PrefixEnum.milli);
-            var I = new Current(5, Unit.SI_PrefixEnum.milli);
-
-            Power P = U * I;
-
-            P.SetPrefix(Unit.SI_PrefixEnum.mikro);
-        }
-
-        [Fact]
-        public void TestPower2()
-        {
-            var U = new Voltage(20, Unit.SI_PrefixEnum.milli);
-            var I = new Current(5, Unit.SI_PrefixEnum.milli);
-            var R = new Resistance(1, Unit.SI_PrefixEnum.hekto);
-
-            Power P2 = (R * QuantityBase.Pow(I, 2)).ToPrefix(Unit.SI_PrefixEnum.mega);
-
-            Power P3 = (QuantityBase.Pow(U, 2) / R).ToPrefix(Unit.SI_PrefixEnum.kilo);
-
-            var t = new Time(1, Units.Hour);
-            
-            Energy e = (P2 - P3) * t;
-
-        }
+       
 
         [Fact]
         public void TestImpulse1()
@@ -322,22 +273,11 @@ namespace UnitTests
             var s = new Speed(10);
 
             Energy e = (q * s).ToPrefix(Unit.SI_PrefixEnum.kilo);
+
+            SerializationTests.DoTestSerialization(e);
         }
 
-        [Fact]
-        public void TestIdealGasLaw()
-        {
-            // Ideal gas law
-            var p = new Pressure(1013, Units.Bar, Unit.SI_PrefixEnum.milli);
-
-            p.SetUnit(Units.mmHg);
-
-            var T = new Temperature(28, Units.Celsius); // 28 degrees celsius in Kelvin
-            var n = new AmountOfSubstance(100);
-
-            Volume V = (Constants.GasConstant * n * T) / p;
-        }
-
+      
 
         [Fact]
         public void TestVolueFlow()
@@ -355,6 +295,8 @@ namespace UnitTests
             VolumeFlow f2 = v / t;
 
             var str = f2.ToString();
+
+            SerializationTests.DoTestSerialization(f2);
         }
 
         [Fact]
@@ -377,11 +319,13 @@ namespace UnitTests
             Volume q2 = q.ToUnit(Units.QubicHectoMetre);
 
             Volume q3 = q2.CovertToUnit(Units.HourEquivalent);
+
+            SerializationTests.DoTestSerialization(q3);
         }
 
 
         [Fact]
-        public void TestMAssFlow()
+        public void TestMassFlow()
         {
             var f1 = new MassFlow(100);
             f1.SetUnit(new TonnesPerHour());
@@ -389,6 +333,8 @@ namespace UnitTests
             var f2 = new MassFlow(100);
 
             var f3 = f1 + f2;
+
+            SerializationTests.DoTestSerialization(f3);
         }
 
         [Fact]
@@ -399,6 +345,8 @@ namespace UnitTests
             var p1 = new Power(100, u1);
 
             Assert.True(p1.Unit.Equals(Units.Watt));
+
+            SerializationTests.DoTestSerialization(p1);
         }
 
         [Fact]
@@ -409,6 +357,8 @@ namespace UnitTests
             var p2 = new Power(100, u, Unit.SI_PrefixEnum.mega);
 
             Assert.True(p2.Unit.Equals(Units.Watt));
+
+            SerializationTests.DoTestSerialization(p2);
         }
 
         [Fact]
@@ -417,6 +367,10 @@ namespace UnitTests
             var u = Units.Watt*Units.Hour;
 
             Assert.True(u.Equals(Units.WattHour));
+
+            string str = u.ToString();
+
+            SerializationTests.DoTestSerialization(u);
         }
 
         [Fact]
@@ -450,7 +404,7 @@ namespace UnitTests
         [Fact]
         public void TestUnitPrice1()
         {
-            var p1 = new UnitPrice(100, new PriceUnit(Currencies.Euro, new BTU(Unit.SI_PrefixEnum.mega)));
+            var p1 = new UnitPrice(100, new PriceUnit(Currencies.Euro, new MegaWattHour()));
 
             var p2 = new UnitPrice(100, new PriceUnit(Currencies.USDollar, new WattHour(Unit.SI_PrefixEnum.mega)));
 
@@ -648,7 +602,7 @@ namespace UnitTests
         {
             public static MyImpulseUnit myImpulseUnit = new MyImpulseUnit();
 
-            public MyImpulseUnit() : base(1, 1, -1, 0, 0, 0, 0)
+            public MyImpulseUnit() : base(1, 1, -1)
             {
                 Scale = 3.1415;
             }

@@ -126,51 +126,7 @@
         }
     }
 
-    public class Temperature : QuantityBase
-    {
-        protected static Kelvin _kelvin = Units.Kelvin;
-        public Temperature(double val) : base(val, _kelvin) { }
-        public Temperature(double val, Unit unit) : base(val, unit) { }
-        public Temperature(double val, Unit unit, Unit.SI_PrefixEnum prefix) : base(val, unit, prefix) { }
-        public static implicit operator Temperature(double val)
-        {
-            return new Temperature(val);
-        }
-        public static implicit operator Temperature(Quantity mq)
-        {
-            if (mq.Unit.SameDimension(_kelvin))
-            {
-                if (mq.Unit == _kelvin)
-                {
-                    return new Temperature(mq.Value, _kelvin, mq.PrefixIndex);
-                }
-                else
-                {
-                    Temperature t = new Temperature(mq.Value, mq.Unit, mq.PrefixIndex);
-                    t.SetUnit(_kelvin);
-                    return t;
-                }
-            }
-            else
-            {
-                throw new IncompatibleUnits();
-            }
-        }
-        public static Temperature operator +(Temperature q1, Temperature q2)
-        {
-            return new Temperature(q1.Unit.FromSIUnit(q1.ValueInSIUnits + q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public static Temperature operator -(Temperature q1, Temperature q2)
-        {
-            return new Temperature(q1.Unit.FromSIUnit(q1.ValueInSIUnits - q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public override QuantityBase Clone()
-        {
-            return new Temperature(_value, _unit, _prefixIndex);
-        }
-    }
+   
 
     public class DimensionlessQuantity : QuantityBase
     {
@@ -306,6 +262,11 @@
     public class MassFlow : QuantityBase
     {
         protected static KilogramPerSecond _kilogramPerSecondUnit = Units.KilogramPerSecond;
+
+        public MassFlow()
+        {
+            
+        }
         public MassFlow(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _kilogramPerSecondUnit, prefix) { }
         public MassFlow(double val, Unit unit, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, unit, prefix) { }
         public static implicit operator MassFlow(double val) { return new MassFlow(val); }
@@ -381,7 +342,12 @@
 
     public class Speed : QuantityBase
     {
-        private static Unit _metrePerSecond = new Unit(1, 0, -1, 0, 0, 0, 0);
+        private static Unit _metrePerSecond = new Unit(1, 0, -1);
+
+        public Speed()
+        {
+            
+        }
         public Speed(double val) : base(val, _metrePerSecond) { }
         public Speed(double val, Unit unit) : base(val, unit) { }
         public Speed(double val, Unit unit, Unit.SI_PrefixEnum prefix) : base(val, unit, prefix) { }
@@ -417,7 +383,13 @@
 
     public class Acceleration : QuantityBase
     {
-        private static Unit _metrePerSecond2 = new Unit(1, 0, -2, 0, 0, 0, 0);
+        private static Unit _metrePerSecond2 = new Unit(1, 0, -2);
+
+        public Acceleration()
+        {
+            
+        }
+
         public Acceleration(double val) : base(val, _metrePerSecond2) { }
         public Acceleration(double val, Unit unit) : base(val, unit) { }
         public Acceleration(double val, Unit unit, Unit.SI_PrefixEnum prefix) : base(val, unit, prefix) { }
@@ -647,7 +619,12 @@
     public class Force : QuantityBase
     {
         static Newton _newton = Units.Newton;
-        //public Force(Force f) : base(f.Value, f.Unit, f.PrefixIndex) { }
+
+        public Force()
+        {
+            
+        }
+
         public Force(double val) : base(val, _newton) { }
         public Force(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _newton, prefix) { }
         public Force(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
@@ -690,55 +667,11 @@
 
     }
 
-    public class Pressure : QuantityBase
-    {
-        static Pascal _pascal = Units.Pascal;
-        public Pressure(Pressure p) : base(p.Value, p.Unit, p.PrefixIndex) { }
-        public Pressure(double val) : base(val, _pascal) { }
-        public Pressure(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _pascal, prefix) { }
-        public Pressure(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
-        public static implicit operator Pressure(double val) { return new Pressure(val); }
-        public static implicit operator Pressure(Quantity mq)
-        {
-            if (mq.Unit.SameDimension(_pascal))
-            {
-                if (mq.Unit == _pascal)
-                {
-                    return new Pressure(mq.Value, _pascal, mq.PrefixIndex);
-                }
-                else
-                {
-                    Pressure p = new Pressure(mq.Value, mq.Unit, mq.PrefixIndex);
-                    p.SetUnit(_pascal);
-                    return p;
-                }
-
-            }
-            else
-            {
-                throw new IncompatibleUnits();
-            }
-        }
-        public static Pressure operator +(Pressure q1, Pressure q2)
-        {
-            return new Pressure(q1.Unit.FromSIUnit(q1.ValueInSIUnits + q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public static Pressure operator -(Pressure q1, Pressure q2)
-        {
-            return new Pressure(q1.Unit.FromSIUnit(q1.ValueInSIUnits - q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public override QuantityBase Clone()
-        {
-            return new Pressure(_value, _unit, _prefixIndex);
-        }
-
-    }
+    
 
     public class Density : QuantityBase
     {
-        static Unit _densityUnit = new Unit(-3, 1, 0, 0, 0, 0, 0);
+        static Unit _densityUnit = new Unit(-3, 1, 0);
         public Density(Density p) : base(p.Value, p.Unit, p.PrefixIndex) { }
         public Density(double val) : base(val, _densityUnit) { }
         public Density(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _densityUnit, prefix) { }
@@ -773,139 +706,7 @@
 
     }
 
-    public class Current : QuantityBase
-    {
-        static Unit _ampere = Units.Ampere;
-        public Current(Current p) : base(p.Value, p.Unit, p.PrefixIndex) { }
-        public Current(double val) : base(val, _ampere) { }
-        public Current(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _ampere, prefix) { }
-        public Current(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
-        public static implicit operator Current(double val) { return new Current(val); }
-        public static implicit operator Current(Quantity mq)
-        {
-            if (mq.Unit.SameDimension(_ampere))
-            {
-                if (mq.Unit == _ampere)
-                {
-                    return new Current(mq.Value, _ampere, mq.PrefixIndex);
-                }
-                else
-                {
-                    Current i = new Current(mq.Value, mq.Unit, mq.PrefixIndex);
-                    i.SetUnit(_ampere);
-                    return i;
-                }
-            }
-            else
-            {
-                throw new IncompatibleUnits();
-            }
-        }
-        public static Current operator +(Current q1, Current q2)
-        {
-            return new Current(q1.Unit.FromSIUnit(q1.ValueInSIUnits + q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public static Current operator -(Current q1, Current q2)
-        {
-            return new Current(q1.Unit.FromSIUnit(q1.ValueInSIUnits - q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public override QuantityBase Clone()
-        {
-            return new Current(this);
-        }
-
-    }
-
-    public class Voltage : QuantityBase
-    {
-        static Unit _volt = Units.Volt;
-        public Voltage(Voltage p) : base(p.Value, p.Unit, p.PrefixIndex) { }
-        public Voltage(double val) : base(val, _volt) { }
-        public Voltage(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _volt, prefix) { }
-        public Voltage(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
-        public static implicit operator Voltage(double val) { return new Voltage(val); }
-        public static implicit operator Voltage(Quantity mq)
-        {
-            if (mq.Unit.SameDimension(_volt))
-            {
-                if (mq.Unit == _volt)
-                {
-                    return new Voltage(mq.Value, _volt, mq.PrefixIndex);
-                }
-                else
-                {
-                    Voltage v = new Voltage(mq.Value, mq.Unit, mq.PrefixIndex);
-                    v.SetUnit(_volt);
-                    return v;
-                }
-            }
-            else
-            {
-                throw new IncompatibleUnits();
-            }
-        }
-        public static Voltage operator +(Voltage q1, Voltage q2)
-        {
-            return new Voltage(q1.Unit.FromSIUnit(q1.ValueInSIUnits + q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public static Voltage operator -(Voltage q1, Voltage q2)
-        {
-            return new Voltage(q1.Unit.FromSIUnit(q1.ValueInSIUnits - q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-        public override QuantityBase Clone()
-        {
-            return new Voltage(this);
-        }
-
-    }
-
-    public class Resistance : QuantityBase
-    {
-        static Unit _ohm = Units.Ohm;
-        public Resistance(Resistance p) : base(p.Value, p.Unit, p.PrefixIndex) { }
-        public Resistance(double val) : base(val, _ohm) { }
-        public Resistance(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _ohm, prefix) { }
-        public Resistance(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
-        public static implicit operator Resistance(double val) { return new Resistance(val); }
-        public static implicit operator Resistance(Quantity mq)
-        {
-            if (mq.Unit.SameDimension(_ohm))
-            {
-                if (mq.Unit == _ohm)
-                {
-                    return new Resistance(mq.Value, _ohm, mq.PrefixIndex);
-                }
-                else
-                {
-                    Resistance r = new Resistance(mq.Value, mq.Unit, mq.PrefixIndex);
-                    r.SetUnit(_ohm);
-                    return r;
-                }
-
-            }
-            else
-            {
-                throw new IncompatibleUnits();
-            }
-        }
-        public static Resistance operator +(Resistance q1, Resistance q2)
-        {
-            return new Resistance(q1.Unit.FromSIUnit(q1.ValueInSIUnits + q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public static Resistance operator -(Resistance q1, Resistance q2)
-        {
-            return new Resistance(q1.Unit.FromSIUnit(q1.ValueInSIUnits - q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public override QuantityBase Clone()
-        {
-            return new Resistance(this);
-        }
-    }
+    
 
     public class PowerRampRate : QuantityBase
     {
@@ -1001,355 +802,5 @@
         }
     }
 
-    public class Capacitance : QuantityBase
-    {
-        static Unit _farad = Units.Farad;
-        public Capacitance(Capacitance p) : base(p.Value, p.Unit, p.PrefixIndex) { }
-        public Capacitance(double val) : base(val, _farad) { }
-        public Capacitance(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _farad, prefix) { }
-        public Capacitance(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
-        public static implicit operator Capacitance(double val) { return new Capacitance(val); }
-        public static implicit operator Capacitance(Quantity mq)
-        {
-            if (mq.Unit.SameDimension(_farad))
-            {
-                if (mq.Unit == _farad)
-                {
-                    return new Capacitance(mq.Value, _farad, mq.PrefixIndex);
-                }
-                else
-                {
-                    Capacitance p = new Capacitance(mq.Value, mq.Unit, mq.PrefixIndex);
-                    p.SetUnit(_farad);
-                    return p;
-                }
-            }
-            else
-            {
-                throw new IncompatibleUnits();
-            }
-        }
-        public static Capacitance operator +(Capacitance q1, Capacitance q2)
-        {
-            return new Capacitance(q1.Unit.FromSIUnit(q1.ValueInSIUnits + q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public static Capacitance operator -(Capacitance q1, Capacitance q2)
-        {
-            return new Capacitance(q1.Unit.FromSIUnit(q1.ValueInSIUnits - q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public override QuantityBase Clone()
-        {
-            return new Capacitance(this);
-        }
-    }
-
-    public class MagneticFluxIntensity : QuantityBase
-    {
-        static Unit _siemens = Units.Siemens;
-        public MagneticFluxIntensity(MagneticFluxIntensity p) : base(p.Value, p.Unit, p.PrefixIndex) { }
-        public MagneticFluxIntensity(double val) : base(val, _siemens) { }
-        public MagneticFluxIntensity(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _siemens, prefix) { }
-        public MagneticFluxIntensity(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
-        public static implicit operator MagneticFluxIntensity(double val) { return new MagneticFluxIntensity(val); }
-        public static implicit operator MagneticFluxIntensity(Quantity mq)
-        {
-            if (mq.Unit.SameDimension(_siemens))
-            {
-                if (mq.Unit == _siemens)
-                {
-                    return new MagneticFluxIntensity(mq.Value, _siemens, mq.PrefixIndex);
-                }
-                else
-                {
-                    MagneticFluxIntensity p = new MagneticFluxIntensity(mq.Value, mq.Unit, mq.PrefixIndex);
-                    p.SetUnit(_siemens);
-                    return p;
-                }
-            }
-            else
-            {
-                throw new IncompatibleUnits();
-            }
-        }
-        public static MagneticFluxIntensity operator +(MagneticFluxIntensity q1, MagneticFluxIntensity q2)
-        {
-            return new MagneticFluxIntensity(q1.Unit.FromSIUnit(q1.ValueInSIUnits + q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public static MagneticFluxIntensity operator -(MagneticFluxIntensity q1, MagneticFluxIntensity q2)
-        {
-            return new MagneticFluxIntensity(q1.Unit.FromSIUnit(q1.ValueInSIUnits - q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public override QuantityBase Clone()
-        {
-            return new MagneticFluxIntensity(this);
-        }
-    }
-
-    public class MagneticFluxDensity : QuantityBase
-    {
-        static Unit _tesla = Units.Tesla;
-        public MagneticFluxDensity(MagneticFluxDensity p) : base(p.Value, p.Unit, p.PrefixIndex) { }
-        public MagneticFluxDensity(double val) : base(val, _tesla) { }
-        public MagneticFluxDensity(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _tesla, prefix) { }
-        public MagneticFluxDensity(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
-        public static implicit operator MagneticFluxDensity(double val) { return new MagneticFluxDensity(val); }
-        public static implicit operator MagneticFluxDensity(Quantity mq)
-        {
-            if (mq.Unit.SameDimension(_tesla))
-            {
-                if (mq.Unit == _tesla)
-                {
-                    return new MagneticFluxDensity(mq.Value, _tesla, mq.PrefixIndex);
-                }
-                else
-                {
-                    MagneticFluxDensity p = new MagneticFluxDensity(mq.Value, mq.Unit, mq.PrefixIndex);
-                    p.SetUnit(_tesla);
-                    return p;
-                }
-            }
-            else
-            {
-                throw new IncompatibleUnits();
-            }
-        }
-        public static MagneticFluxDensity operator +(MagneticFluxDensity q1, MagneticFluxDensity q2)
-        {
-            return new MagneticFluxDensity(q1.Unit.FromSIUnit(q1.ValueInSIUnits + q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public static MagneticFluxDensity operator -(MagneticFluxDensity q1, MagneticFluxDensity q2)
-        {
-            return new MagneticFluxDensity(q1.Unit.FromSIUnit(q1.ValueInSIUnits - q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public override QuantityBase Clone()
-        {
-            return new MagneticFluxDensity(this);
-        }
-    }
-
-    public class MagneticFlux : QuantityBase
-    {
-        static Unit _weber = Units.Weber;
-        public MagneticFlux(MagneticFlux p) : base(p.Value, p.Unit, p.PrefixIndex) { }
-        public MagneticFlux(double val) : base(val, _weber) { }
-        public MagneticFlux(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _weber, prefix) { }
-        public MagneticFlux(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
-        public static implicit operator MagneticFlux(double val) { return new MagneticFlux(val); }
-        public static implicit operator MagneticFlux(Quantity mq)
-        {
-            if (mq.Unit.SameDimension(_weber))
-            {
-                if (mq.Unit == _weber)
-                {
-                    return new MagneticFlux(mq.Value, _weber, mq.PrefixIndex);
-                }
-                else
-                {
-                    MagneticFlux p = new MagneticFlux(mq.Value, mq.Unit, mq.PrefixIndex);
-                    p.SetUnit(_weber);
-                    return p;
-                }
-            }
-            else
-            {
-                throw new IncompatibleUnits();
-            }
-        }
-        public static MagneticFlux operator +(MagneticFlux q1, MagneticFlux q2)
-        {
-            return new MagneticFlux(q1.Unit.FromSIUnit(q1.ValueInSIUnits + q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public static MagneticFlux operator -(MagneticFlux q1, MagneticFlux q2)
-        {
-            return new MagneticFlux(q1.Unit.FromSIUnit(q1.ValueInSIUnits - q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public override QuantityBase Clone()
-        {
-            return new MagneticFlux(this);
-        }
-    }
-
-    public class Inductance : QuantityBase
-    {
-        static Unit _henry = Units.Henry;
-        public Inductance(Inductance p) : base(p.Value, p.Unit, p.PrefixIndex) { }
-        public Inductance(double val) : base(val, _henry) { }
-        public Inductance(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _henry, prefix) { }
-        public Inductance(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
-        public static implicit operator Inductance(double val) { return new Inductance(val); }
-        public static implicit operator Inductance(Quantity mq)
-        {
-            if (mq.Unit.SameDimension(_henry))
-            {
-                if (mq.Unit == _henry)
-                {
-                    return new Inductance(mq.Value, _henry, mq.PrefixIndex);
-                }
-                else
-                {
-                    Inductance p = new Inductance(mq.Value, mq.Unit, mq.PrefixIndex);
-                    p.SetUnit(_henry);
-                    return p;
-                }
-            }
-            else
-            {
-                throw new IncompatibleUnits();
-            }
-        }
-        public static Inductance operator +(Inductance q1, Inductance q2)
-        {
-            return new Inductance(q1.Unit.FromSIUnit(q1.ValueInSIUnits + q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public static Inductance operator -(Inductance q1, Inductance q2)
-        {
-            return new Inductance(q1.Unit.FromSIUnit(q1.ValueInSIUnits - q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public override QuantityBase Clone()
-        {
-            return new Inductance(this);
-        }
-    }
-
-    public class LuminousIntensity : QuantityBase
-    {
-        static Unit _candela = Units.Candela;
-        public LuminousIntensity(LuminousIntensity p) : base(p.Value, p.Unit, p.PrefixIndex) { }
-        public LuminousIntensity(double val) : base(val, _candela) { }
-        public LuminousIntensity(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _candela, prefix) { }
-        public LuminousIntensity(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
-        public static implicit operator LuminousIntensity(double val) { return new LuminousIntensity(val); }
-        public static implicit operator LuminousIntensity(Quantity mq)
-        {
-            if (mq.Unit.SameDimension(_candela))
-            {
-                if (mq.Unit == _candela)
-                {
-                    return new LuminousIntensity(mq.Value, _candela, mq.PrefixIndex);
-                }
-                else
-                {
-                    LuminousIntensity p = new LuminousIntensity(mq.Value, mq.Unit, mq.PrefixIndex);
-                    p.SetUnit(_candela);
-                    return p;
-                }
-            }
-            else
-            {
-                throw new IncompatibleUnits();
-            }
-        }
-        public static LuminousIntensity operator +(LuminousIntensity q1, LuminousIntensity q2)
-        {
-            return new LuminousIntensity(q1.Unit.FromSIUnit(q1.ValueInSIUnits + q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public static LuminousIntensity operator -(LuminousIntensity q1, LuminousIntensity q2)
-        {
-            return new LuminousIntensity(q1.Unit.FromSIUnit(q1.ValueInSIUnits - q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public override QuantityBase Clone()
-        {
-            return new LuminousIntensity(this);
-        }
-    }
-
-    public class CatalyticActivity : QuantityBase
-    {
-        static Unit _katal = Units.Katal;
-        public CatalyticActivity(CatalyticActivity p) : base(p.Value, p.Unit, p.PrefixIndex) { }
-        public CatalyticActivity(double val) : base(val, _katal) { }
-        public CatalyticActivity(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _katal, prefix) { }
-        public CatalyticActivity(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
-        public static implicit operator CatalyticActivity(double val) { return new CatalyticActivity(val); }
-        public static implicit operator CatalyticActivity(Quantity mq)
-        {
-            if (mq.Unit.SameDimension(_katal))
-            {
-                if (mq.Unit == _katal)
-                {
-                    return new CatalyticActivity(mq.Value, _katal, mq.PrefixIndex);
-                }
-                else
-                {
-                    CatalyticActivity p = new CatalyticActivity(mq.Value, mq.Unit, mq.PrefixIndex);
-                    p.SetUnit(_katal);
-                    return p;
-                }
-            }
-            else
-            {
-                throw new IncompatibleUnits();
-            }
-        }
-        public static CatalyticActivity operator +(CatalyticActivity q1, CatalyticActivity q2)
-        {
-            return new CatalyticActivity(q1.Unit.FromSIUnit(q1.ValueInSIUnits + q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public static CatalyticActivity operator -(CatalyticActivity q1, CatalyticActivity q2)
-        {
-            return new CatalyticActivity(q1.Unit.FromSIUnit(q1.ValueInSIUnits - q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public override QuantityBase Clone()
-        {
-            return new CatalyticActivity(this);
-        }
-    }
-
-    public class AmountOfSubstance : QuantityBase
-    {
-        static Unit _mole = Units.Mole;
-        public AmountOfSubstance(AmountOfSubstance p) : base(p.Value, p.Unit, p.PrefixIndex) { }
-        public AmountOfSubstance(double val) : base(val, _mole) { }
-        public AmountOfSubstance(double val, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, _mole, prefix) { }
-        public AmountOfSubstance(double val, Unit u, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity) : base(val, u, prefix) { }
-        public static implicit operator AmountOfSubstance(double val) { return new AmountOfSubstance(val); }
-        public static implicit operator AmountOfSubstance(Quantity mq)
-        {
-            if (mq.Unit.SameDimension(_mole))
-            {
-                if (mq.Unit == _mole)
-                {
-                    return new AmountOfSubstance(mq.Value, _mole, mq.PrefixIndex);
-                }
-                else
-                {
-                    AmountOfSubstance p = new AmountOfSubstance(mq.Value, mq.Unit, mq.PrefixIndex);
-                    p.SetUnit(_mole);
-                    return p;
-                }
-            }
-            else
-            {
-                throw new IncompatibleUnits();
-            }
-        }
-        public static AmountOfSubstance operator +(AmountOfSubstance q1, AmountOfSubstance q2)
-        {
-            return new AmountOfSubstance(q1.Unit.FromSIUnit(q1.ValueInSIUnits + q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public static AmountOfSubstance operator -(AmountOfSubstance q1, AmountOfSubstance q2)
-        {
-            return new AmountOfSubstance(q1.Unit.FromSIUnit(q1.ValueInSIUnits - q2.ValueInSIUnits) / q1.prefix.Factor, q1.Unit, q1.PrefixIndex);
-        }
-
-        public override QuantityBase Clone()
-        {
-            return new AmountOfSubstance(this);
-        }
-    }
+   
 }
