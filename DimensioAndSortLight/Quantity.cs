@@ -25,7 +25,7 @@ namespace GreenOptimizer.DimensionAndSort
     {
         #region members
         protected Unit _unit;
-        protected double _value;
+        protected double _valueInSIUnits;
         protected Unit.SI_PrefixEnum _prefixIndex = Unit.SI_PrefixEnum.unity;
         protected string _symbol;
         #endregion
@@ -50,7 +50,7 @@ namespace GreenOptimizer.DimensionAndSort
             unchecked
             {
                 var hashCode = (_unit != null ? _unit.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ _value.GetHashCode();
+                hashCode = (hashCode * 397) ^ _valueInSIUnits.GetHashCode();
                 hashCode = (hashCode * 397) ^ (int)_prefixIndex;
                 hashCode = (hashCode * 397) ^ (_symbol != null ? _symbol.GetHashCode() : 0);
                 return hashCode;
@@ -77,22 +77,27 @@ namespace GreenOptimizer.DimensionAndSort
 
         public double ValueInSIUnits
         {
-            get { return prefix.Factor * (_unit.Scale * _value + _unit.Offset); }
-            set { _value = value; }
+            get { return _valueInSIUnits; }
+            set { _valueInSIUnits = value; }
         }
 
+        public double ToSIUnit(double value, Unit unit, Unit.SI_PrefixEnum prefixIndex = Unit.SI_PrefixEnum.unity)
+        {
+            return Unit.Prefixes[(int) prefixIndex].Factor * (_unit.Scale * value + _unit.Offset);
+        }
+
+        [JsonIgnore]
         public double Value
         {
-            get { return _value; }
-            set { _value = value; }
+            get { return (_valueInSIUnits/prefix.Factor - _unit.Offset)/_unit.Scale; }
+           
         }
-
        
 
         public QuantityBase(double value, Unit unit, Unit.SI_PrefixEnum prefix = Unit.SI_PrefixEnum.unity, string symbol = "")
         {
             _unit = unit;
-            _value = value;
+            _valueInSIUnits = ToSIUnit(value, unit, prefix);
             _prefixIndex = prefix;
             _symbol = symbol;
         }
@@ -107,7 +112,6 @@ namespace GreenOptimizer.DimensionAndSort
         {
             if (newUnit.SameDimension(_unit))
             {
-                _value = newUnit.FromSIUnit(ValueInSIUnits);
                 _unit = newUnit;
                 _prefixIndex = Unit.SI_PrefixEnum.unity;
             }
@@ -228,12 +232,14 @@ namespace GreenOptimizer.DimensionAndSort
         /// </summary>
         public QuantityBase AdjustPrefix()
         {
-            double minval = Math.Abs(_value - 1); 
+            
+            double val = Value;
+            double minval = Math.Abs(val - 1); 
             Unit.SI_PrefixEnum minind = _prefixIndex;
             foreach (Unit.SI_PrefixEnum sIprefix in Enum.GetValues(typeof(Unit.SI_PrefixEnum)))
             {
                 Unit.SIprefix  pref = Unit.Prefixes[(int) sIprefix];
-                double newValue =  Math.Abs(_value*prefix.Factor / pref.Factor - 1);
+                double newValue =  Math.Abs(val*prefix.Factor / pref.Factor - 1);
                 if (newValue < minval)
                 {
                     minval = newValue;
@@ -251,21 +257,20 @@ namespace GreenOptimizer.DimensionAndSort
 
         public void SetPrefix(Unit.SI_PrefixEnum newprefix)
         {
-            this._value *= prefix.Factor / Unit.Prefixes[(int)newprefix].Factor;
-            PrefixIndex = newprefix;
+            _prefixIndex = newprefix;
         }
 
         public override string ToString()
         {
             string str = "";
 
-            if (_value >= 0.01)
+            if (Value >= 0.01)
             {
-                str = _value.ToString("0.00") + " " + prefix.Symbol + _unit;
+                str = Value.ToString("0.00") + " " + prefix.Symbol + _unit;
             }
             else
             {
-                str = _value.ToString("e2") + " " + prefix.Symbol + _unit;
+                str = Value.ToString("e2") + " " + prefix.Symbol + _unit;
             }
 
             return str;
@@ -274,7 +279,7 @@ namespace GreenOptimizer.DimensionAndSort
 
         public virtual QuantityBase Clone()
         {
-            return new QuantityBase(_value, _unit, _prefixIndex);
+            return new QuantityBase(Value, _unit, _prefixIndex);
         }
 
 

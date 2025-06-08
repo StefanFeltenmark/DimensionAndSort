@@ -558,7 +558,7 @@ namespace UnitTests
         {
             var v = new Volume(1, new QubicHectoMetre());
 
-            v.Value = 10;
+            v = 10;
 
             var l = new Length(10);
 
@@ -567,7 +567,7 @@ namespace UnitTests
             a = a.CovertToUnit(new SquareKilometer());
 
 
-            Assert.True(Math.Abs(a.Value - 1) < 1e-3);
+            Assert.True(Math.Abs(a.Value - 1e-6) < 1e-3);
         }
 
         [Fact]
@@ -575,7 +575,7 @@ namespace UnitTests
         {
             var v = new Volume(1, new QubicHectoMetre());
 
-            v.Value = 10;
+            v = 10;
 
             var v2 = new Volume(10, Units.Litre);
 

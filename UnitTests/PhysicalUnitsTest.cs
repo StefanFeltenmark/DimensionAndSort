@@ -2,6 +2,7 @@
 using GreenOptimizer.DimensionAndSort;
 using Xunit;
 using System.Reflection;
+using DimensionAndSort;
 
 namespace UnitTests
 {

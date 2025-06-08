@@ -1,4 +1,5 @@
 using System.Text;
+using Newtonsoft.Json;
 
 namespace GreenOptimizer.DimensionAndSort
 {
@@ -401,6 +402,8 @@ namespace GreenOptimizer.DimensionAndSort
         public static Unit AsBaseUnit(Unit u)
         {
             Unit bu = null;
+
+
             try
             {
                 bu = _baseUnits.First(cu => cu.Equals(u));

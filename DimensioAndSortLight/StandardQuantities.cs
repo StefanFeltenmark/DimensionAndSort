@@ -41,7 +41,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Length(_value, _unit, _prefixIndex);
+            return new Length(Value, _unit, _prefixIndex);
         }
     }
 
@@ -78,7 +78,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Time(_value, _unit, _prefixIndex);
+            return new Time(Value, _unit, _prefixIndex);
         }
     }
 
@@ -122,7 +122,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Mass(_value, _unit, _prefixIndex);
+            return new Mass(Value, _unit, _prefixIndex);
         }
     }
 
@@ -147,7 +147,7 @@
 
         public override QuantityBase Clone()
         {
-            return new DimensionlessQuantity(_value, _prefixIndex);
+            return new DimensionlessQuantity(Value, _prefixIndex);
         }
     }
 
@@ -171,7 +171,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Percentage(_value);
+            return new Percentage(Value);
         }
 
 
@@ -214,7 +214,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Volume(_value, _unit, _prefixIndex);
+            return new Volume(Value, _unit, _prefixIndex);
         }
 
     }
@@ -254,7 +254,7 @@
 
         public override QuantityBase Clone()
         {
-            return new VolumeFlow(_value, _unit, _prefixIndex);
+            return new VolumeFlow(Value, _unit, _prefixIndex);
         }
 
     }
@@ -293,7 +293,7 @@
 
         public override QuantityBase Clone()
         {
-            return new MassFlow(_value, _unit, _prefixIndex);
+            return new MassFlow(Value, _unit, _prefixIndex);
         }
 
     }
@@ -334,7 +334,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Area(_value, _unit, _prefixIndex);
+            return new Area(Value, _unit, _prefixIndex);
         }
 
 
@@ -376,7 +376,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Speed(_value, _unit, _prefixIndex);
+            return new Speed(Value, _unit, _prefixIndex);
         }
 
     }
@@ -417,7 +417,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Acceleration(_value, _unit, _prefixIndex);
+            return new Acceleration(Value, _unit, _prefixIndex);
         }
 
     }
@@ -466,7 +466,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Energy(_value, _unit, _prefixIndex);
+            return new Energy(Value, _unit, _prefixIndex);
         }
 
     }
@@ -518,7 +518,7 @@
 
         public override QuantityBase Clone()
         {
-            return new EnergyEquivalent(_value, _unit, _prefixIndex);
+            return new EnergyEquivalent(Value, _unit, _prefixIndex);
         }
 
     }
@@ -565,7 +565,7 @@
 
         public override QuantityBase Clone()
         {
-            return new HeatingValue(_value, _unit, _prefixIndex);
+            return new HeatingValue(Value, _unit, _prefixIndex);
         }
 
     }
@@ -611,7 +611,7 @@
 
         public override QuantityBase Clone()
         {
-            return new SpecificEnergy(_value, _unit, _prefixIndex);
+            return new SpecificEnergy(Value, _unit, _prefixIndex);
         }
 
     }
@@ -662,7 +662,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Force(_value, _unit, _prefixIndex);
+            return new Force(Value, _unit, _prefixIndex);
         }
 
     }
@@ -701,7 +701,7 @@
 
         public override QuantityBase Clone()
         {
-            return new Density(_value, _unit, _prefixIndex);
+            return new Density(Value, _unit, _prefixIndex);
         }
 
     }

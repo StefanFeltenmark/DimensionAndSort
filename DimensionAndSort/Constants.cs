@@ -1,4 +1,6 @@
-﻿namespace GreenOptimizer.DimensionAndSort
+﻿using DimensionAndSort;
+
+namespace GreenOptimizer.DimensionAndSort
 {
     public static class Constants
     {

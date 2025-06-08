@@ -1,3 +1,5 @@
+using DimensionAndSort;
+
 namespace GreenOptimizer.DimensionAndSort
 {
     public class Length : QuantityBase

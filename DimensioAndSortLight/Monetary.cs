@@ -138,7 +138,7 @@
 
         public override QuantityBase Clone()
         {
-            return new MonetaryAmount(_value, _unit, _prefixIndex);
+            return new MonetaryAmount(Value, _unit, _prefixIndex);
         }
     }
 
