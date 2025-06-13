@@ -112,6 +112,8 @@ namespace GreenOptimizer.DimensionAndSort
 
         }
 
+        public override double Value => _valueInSIUnits;
+
         public static implicit operator MonetaryAmount(double val)
         {
             return new MonetaryAmount(val);

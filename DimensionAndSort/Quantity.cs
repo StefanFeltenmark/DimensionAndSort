@@ -89,7 +89,7 @@ namespace DimensionAndSort
         }
 
         [JsonIgnore]
-        public double Value
+        public virtual double Value
         {
             get { return (_valueInSIUnits/prefix.Factor - _unit.Offset)/_unit.Scale; }
            

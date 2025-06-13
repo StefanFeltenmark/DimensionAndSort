@@ -140,6 +140,8 @@
         {
             return new MonetaryAmount(Value, _unit, _prefixIndex);
         }
+
+        public override double Value => _valueInSIUnits;
     }
 
     public class UnitPrice : ICloneable
