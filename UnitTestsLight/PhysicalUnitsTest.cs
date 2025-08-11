@@ -598,6 +598,17 @@ namespace UnitTests
 
         }
 
+        [Fact]
+        public void TestPowerRampRate()
+        {
+            PowerRampRate r = new PowerRampRate(1000000/60); // W/s
+
+            r.SetUnit(Units.MegaWattPerMinute);
+            
+            Assert.True(Math.Abs(r.Value - 1) < 1e-3);
+
+        }
+
         public class MyImpulseUnit : Unit
         {
             public static MyImpulseUnit myImpulseUnit = new MyImpulseUnit();
