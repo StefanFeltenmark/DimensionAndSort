@@ -32,6 +32,8 @@
         public static WattHour WattHour = new WattHour();
         public static MegaWattHour MegaWattHour = new MegaWattHour();
         public static Percent Percent = new Percent();
+
+        public static readonly MegaWattPerMinute MegaWattPerMinute = new MegaWattPerMinute();
     }
 
     public abstract class TimeUnit : Unit
@@ -315,6 +317,19 @@
         public override string ToString() { return "MWh"; }
     }
 
+    
+    public class MegaWattPerMinute : Unit
+    {
+        public MegaWattPerMinute() : base(2, 1, -4)
+        {
+            Scale = 1000000.0/60.0;
+        }
+
+        public override string ToString()
+        {
+            return "MW/min";
+        }
+    }
     
     #endregion
 
