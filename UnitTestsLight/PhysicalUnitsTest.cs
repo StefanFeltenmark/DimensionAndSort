@@ -9,6 +9,35 @@ namespace UnitTests
     /// </summary>
     public class PhysicalUnitsTest
     {
+        [Fact]
+        public void Constructor_InitializesProperties()
+        {
+            var unit = new Unit(1, 2, 3, 4, 5);
+
+            Assert.Equal(1, unit._dimensions[0]);
+            Assert.Equal(2, unit._dimensions[1]);
+            Assert.Equal(3, unit._dimensions[2]);
+            Assert.Equal(4, unit.Scale);
+            Assert.Equal(5, unit.Offset);
+        }
+
+        [Fact]
+        public void Equals_ReturnsTrueForIdenticalUnits()
+        {
+            var u1 = new Unit(1, 2, 3, 4, 5);
+            var u2 = new Unit(1, 2, 3, 4, 5);
+
+            Assert.True(u1.Equals(u2));
+        }
+
+        [Fact]
+        public void Equals_ReturnsFalseForDifferentUnits()
+        {
+            var u1 = new Unit(1, 2, 3, 4, 5);
+            var u2 = new Unit(0, 2, 3, 4, 5);
+
+            Assert.False(u1.Equals(u2));
+        }
 
         [Fact]
         public void TestLength1()

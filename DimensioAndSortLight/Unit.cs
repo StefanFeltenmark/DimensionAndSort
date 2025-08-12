@@ -148,55 +148,7 @@ namespace GreenOptimizer.DimensionAndSort
 
         }
 
-        //public struct DimensionUnit
-        //{
-        //    #region fields
-        //    private int _exponent;
-        //    private SI_PrefixEnum _SI_prefix;
-        //    #endregion
-
-        //    public int Exponent
-        //    {
-        //        get { return _exponent; }
-        //        set { _exponent = value; }
-        //    }
-
-            
-        //    public SI_PrefixEnum SI_prefix
-        //    {
-        //        get { return _SI_prefix; }
-        //        set { _SI_prefix = value; }
-        //    }
-
-        //    public DimensionUnit(DimensionUnit u)
-        //    {
-        //        _exponent = u.Exponent;
-        //        _SI_prefix = u.SI_prefix;
-        //    }
-
-        //    public void CopyTo(DimensionUnit u)
-        //    {
-        //        u.Exponent = _exponent;
-        //        u._SI_prefix = _SI_prefix;
-        //    }
-
-        //    public DimensionUnit(int exponent, SI_PrefixEnum prefix)
-        //    {
-        //        _exponent = exponent;
-        //        _SI_prefix = prefix;
-        //    }
-
-        //    public DimensionUnit()
-        //    {
-        //        _exponent = 0;
-        //        _SI_prefix = SI_PrefixEnum.unity;
-        //    }
-
-        //    public override string ToString()
-        //    {
-        //        return _prefixes[(int)_SI_prefix].Name;
-        //    }
-        //}
+        
 
         public enum BaseUnitEnum { metre, kilogram, second }
 
@@ -545,6 +497,11 @@ namespace GreenOptimizer.DimensionAndSort
             string str = Prefix + ((sbTaljare.Length > 0) ? sbTaljare.ToString() : "1") + ((sbNamnare.Length > 0) ? ("/" + sbNamnare) : "");
 
             return str;
+        }
+
+        public double ToSIUnit(double value)
+        {
+            return _scale * value + _offset;
         }
     }
 }

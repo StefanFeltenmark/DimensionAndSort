@@ -7,6 +7,37 @@ namespace UnitTestsLight
 {
     public class MonetaryTests
     {
+
+        [Fact]
+        public void Constructor_InitializesValueAndCurrency()
+        {
+            var m = new MonetaryAmount(100.5, Currencies.USDollar);
+
+            Assert.Equal(100.5, m.Value);
+            Assert.Equal("USD", ((Currency) m.Unit).Name);
+        }
+
+        [Fact]
+        public void Equals_ReturnsTrueForIdenticalMonetary()
+        {
+
+            var m1 = new MonetaryAmount(100.5, Currencies.USDollar);
+            var m2 = new MonetaryAmount(100.5, Currencies.USDollar);
+            
+
+            Assert.True(m1.Equals(m2));
+        }
+
+        [Fact]
+        public void Equals_ReturnsFalseForDifferentMonetary()
+        {
+            var m1 = new MonetaryAmount(100.5, Currencies.USDollar);
+            var m2 = new MonetaryAmount(200, Currencies.USDollar);
+
+
+            Assert.False(m1.Equals(m2));
+        }
+
         [Fact]
         public void Currency_ToString_ReturnsName()
         {
@@ -182,4 +213,6 @@ namespace UnitTestsLight
             Assert.NotSame(priceUnit, clone);
         }
     }
+
+    
 }

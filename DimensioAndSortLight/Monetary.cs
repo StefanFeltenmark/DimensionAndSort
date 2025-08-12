@@ -91,6 +91,7 @@
         }
     }
 
+   
     public class MonetaryAmount : QuantityBase
     {
         protected static Currency _euro = Currencies.Euro;
@@ -166,9 +167,9 @@
             return new UnitPrice(Price, (PriceUnit)PriceUnit.Clone());
         }
 
-        public UnitPrice ConvertToUnit(PriceUnit newunit)
+        public UnitPrice? ConvertToUnit(PriceUnit newunit)
         {
-            UnitPrice p = null;
+            UnitPrice? p = null;
             if (newunit.Unit.SameDimension(PriceUnit.Unit))
             {
                 var factor1 = PriceUnit.Unit.FromSIUnit(1) / newunit.Unit.FromSIUnit(1);
@@ -186,23 +187,7 @@
             return p;
         }
 
-        //        Unit unit = newUnit;
-        //        double value = newUnit.FromSIUnit(ValueInSIUnits);
-        //    {
-        //    if (newUnit.SameDimension(_unit))
-        //    Quantity q = null;
-        //{
-
-        //public Quantity CovertToUnit(Unit newUnit)
-        //        Unit.SI_PrefixEnum prefixIndex = Unit.SI_PrefixEnum.unity;
-        //        q = new Quantity(value, unit, prefixIndex);
-        //    }
-        //    else
-        //    {
-        //        throw new IncompatibleUnits();
-        //    }
-        //    return q;
-        //}
+       
     }
 
     public class PriceUnit : ICloneable

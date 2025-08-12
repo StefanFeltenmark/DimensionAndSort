@@ -239,7 +239,7 @@ namespace GreenOptimizer.DimensionAndSort
 
         #region memberVariables
         
-        public DimensionUnit[] _dimensions; // = new Unit.DimensionUnit[7];
+        public DimensionUnit[]? _dimensions; // = new Unit.DimensionUnit[7];
         protected double _scale;  // To SI-units
         protected double _offset;  // To SI-units
 
@@ -266,12 +266,12 @@ namespace GreenOptimizer.DimensionAndSort
 
         public Unit()
         {
-
+            
         }
 
         protected void SetScaling(BaseUnitEnum baseunit, Scaling s)
         {
-            _dimensions[(int)baseunit].Scaling = s;
+            if (_dimensions != null) _dimensions[(int)baseunit].Scaling = s;
             RecomputeScale();
         }
 
@@ -377,7 +377,7 @@ namespace GreenOptimizer.DimensionAndSort
             return u1.Equals(u2);
         }
 
-        public static bool operator !=(Unit u1, Unit u2)
+        public static bool operator !=(Unit? u1, Unit? u2)
         {
             if ((object)u1 == null && (object)u2 == null)
             {
@@ -399,10 +399,9 @@ namespace GreenOptimizer.DimensionAndSort
         }
 
 
-        public static Unit AsBaseUnit(Unit u)
+        public static Unit? AsBaseUnit(Unit u)
         {
-            Unit bu = null;
-
+            Unit? bu = null;
 
             try
             {
@@ -415,9 +414,9 @@ namespace GreenOptimizer.DimensionAndSort
             return bu;
         }
 
-        public static Unit AsDerivedUnit(Unit u)
+        public static Unit? AsDerivedUnit(Unit u)
         {
-            Unit du = null;
+            Unit? du = null;
             try
             {
                 du = _derivedUnits.First(cu => cu.SameDimension(u));
@@ -427,11 +426,9 @@ namespace GreenOptimizer.DimensionAndSort
 
             }
 
-            if (du != null)
-            {
-                du.Scale = u.Scale;
-                du.PrefixIndex = u._prefixIndex;
-            }
+            if (du == null) return du;
+            du.Scale = u.Scale;
+            du.PrefixIndex = u._prefixIndex;
 
             return du;
         }
